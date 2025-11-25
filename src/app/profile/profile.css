@@ -1,0 +1,623 @@
+/* ============================================
+   PROFILE CONTAINER - Full page layout with background
+   ============================================ */
+.profile-container {
+    min-height: calc(100vh - 80px);
+    padding: 2rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Static grid background - matching auth pages aesthetic */
+.profile-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Static gradient orbs in background for visual interest */
+.profile-container::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 30% 40%,
+        rgba(96, 165, 250, 0.08) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        circle at 70% 60%,
+        rgba(167, 139, 250, 0.08) 0%,
+        transparent 50%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .profile-container {
+        padding: 3rem 1.5rem;
+    }
+}
+
+/* ============================================
+   PROFILE CARD - Enhanced glassmorphism
+   ============================================ */
+.profile-card {
+    width: 100%;
+    max-width: 42rem;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 
+        0 20px 60px -10px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(96, 165, 250, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    z-index: 10;
+}
+
+/* ============================================
+   PROFILE HEADER - Horizontal compact layout
+   ============================================ */
+.profile-header {
+    background: linear-gradient(
+        135deg, 
+        rgba(96, 165, 250, 0.15), 
+        rgba(192, 132, 252, 0.12),
+        rgba(167, 139, 250, 0.15)
+    );
+    border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+    padding: 1.5rem 2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+/* Decorative gradient line at top */
+.profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #60a5fa, #c084fc, #a78bfa);
+    box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+}
+
+/* Left side container with avatar and text */
+.profile-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex: 1;
+    min-width: 0; /* Allow text truncation if needed */
+}
+
+.profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #a78bfa);
+    border-radius: 50%;
+    color: #ffffff;
+    box-shadow: 
+        0 6px 20px rgba(96, 165, 250, 0.3),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+/* Text container */
+.profile-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0; /* Allow text truncation if needed */
+}
+
+.profile-title {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.profile-subtitle {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Mobile adjustments for header */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .profile-header-left {
+        width: 100%;
+    }
+}
+
+@media (max-width: 639px) {
+    .profile-avatar {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .profile-title {
+        font-size: 1.25rem;
+        letter-spacing: 0.075em;
+    }
+
+    .profile-subtitle {
+        font-size: 0.8125rem;
+    }
+}
+
+.profile-logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 2px solid rgba(239, 68, 68, 0.4);
+    border-radius: 0.625rem;
+    color: #f87171;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+    flex-shrink: 0; /* Prevent button from shrinking */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.profile-logout-button:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+/* Mobile: Full width when header is stacked */
+@media (max-width: 768px) {
+    .profile-logout-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Smaller button on small mobile */
+@media (max-width: 639px) {
+    .profile-logout-button {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ============================================
+   PROFILE CONTENT
+   ============================================ */
+.profile-content {
+    padding: 2rem;
+}
+
+@media (min-width: 640px) {
+    .profile-content {
+        padding: 2.5rem;
+    }
+}
+
+/* ============================================
+   PROFILE SECTIONS - Enhanced with cards
+   ============================================ */
+.profile-section {
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(55, 65, 81, 0.6);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.profile-section:hover {
+    border-color: rgba(96, 165, 250, 0.3);
+    background: rgba(17, 24, 39, 0.7);
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.1);
+}
+
+.profile-section:last-child {
+    margin-bottom: 0;
+}
+
+.profile-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    margin-bottom: 1rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.profile-section-title svg {
+    color: #60a5fa;
+}
+
+.profile-section-value {
+    font-size: 1.125rem;
+    color: #f9fafb;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.profile-id {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    color: #9ca3af;
+    word-break: break-all;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+/* ============================================
+   PROFILE BADGES - Enhanced status indicators
+   ============================================ */
+.profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+}
+
+.profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-jetbrains-mono), monospace;
+    letter-spacing: 0.025em;
+    border: 2px solid;
+    transition: all 0.2s ease;
+}
+
+.profile-badge:hover {
+    transform: scale(1.02);
+}
+
+.profile-badge.active {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+    box-shadow: 0 0 16px rgba(34, 197, 94, 0.15);
+}
+
+.profile-badge.inactive {
+    background: rgba(156, 163, 175, 0.08);
+    border-color: rgba(156, 163, 175, 0.4);
+    color: #9ca3af;
+    box-shadow: 0 0 16px rgba(156, 163, 175, 0.1);
+}
+
+.profile-badge.verified {
+    background: rgba(96, 165, 250, 0.08);
+    border-color: rgba(96, 165, 250, 0.4);
+    color: #60a5fa;
+    box-shadow: 0 0 16px rgba(96, 165, 250, 0.15);
+}
+
+.profile-badge.unverified {
+    background: rgba(251, 191, 36, 0.08);
+    border-color: rgba(251, 191, 36, 0.4);
+    color: #fbbf24;
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.15);
+}
+
+.profile-badge.superuser {
+    background: rgba(167, 139, 250, 0.08);
+    border-color: rgba(167, 139, 250, 0.4);
+    color: #a78bfa;
+    box-shadow: 0 0 16px rgba(167, 139, 250, 0.15);
+}
+
+.profile-badge svg {
+    flex-shrink: 0;
+}
+
+/* ============================================
+   PROFILE STATES - Enhanced Loading & Error
+   ============================================ */
+.profile-loading,
+.profile-error {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #9ca3af;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(55, 65, 81, 0.6);
+    border-radius: 0.75rem;
+    max-width: 32rem;
+    margin: 0 auto;
+}
+
+.profile-error {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+}
+
+/* Mobile adjustments */
+@media (max-width: 639px) {
+    .profile-section {
+        padding: 1.25rem;
+    }
+
+    .profile-section-title {
+        font-size: 0.8125rem;
+    }
+
+    .profile-section-value {
+        font-size: 1rem;
+    }
+
+    .profile-badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+    }
+
+    .profile-id {
+        font-size: 0.8125rem;
+        padding: 0.625rem 0.875rem;
+    }
+}
+
+/* ============================================
+   SUBSCRIPTION SECTION
+   ============================================ */
+.subscription-section {
+    border-color: rgba(167, 139, 250, 0.3);
+}
+
+.subscription-section:hover {
+    border-color: rgba(167, 139, 250, 0.5);
+    box-shadow: 0 0 24px rgba(167, 139, 250, 0.15);
+}
+
+.subscription-message {
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subscription-message.success {
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+}
+
+.subscription-message.info {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: #fbbf24;
+}
+
+.subscription-status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.subscription-tier {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    font-family: var(--font-jetbrains-mono), monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 2px solid;
+    width: fit-content;
+}
+
+.subscription-tier.premium {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(192, 132, 252, 0.12));
+    border-color: rgba(167, 139, 250, 0.5);
+    color: #c084fc;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
+}
+
+.subscription-tier.free {
+    background: rgba(96, 165, 250, 0.08);
+    border-color: rgba(96, 165, 250, 0.4);
+    color: #60a5fa;
+    box-shadow: 0 0 16px rgba(96, 165, 250, 0.15);
+}
+
+.subscription-renewal {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    padding-left: 0.25rem;
+}
+
+.subscription-renewal.canceled {
+    color: #fbbf24;
+}
+
+.subscription-benefits {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 0.625rem;
+    border: 1px solid rgba(55, 65, 81, 0.5);
+}
+
+.subscription-benefits h3 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    margin-bottom: 1rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.subscription-benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.subscription-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9375rem;
+    color: #d1d5db;
+}
+
+.subscription-benefits li svg {
+    color: #4ade80;
+    flex-shrink: 0;
+}
+
+.subscription-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.subscription-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.625rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid;
+    flex: 1;
+    max-width: 20rem;
+}
+
+.subscription-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.subscription-button.upgrade {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(192, 132, 252, 0.12));
+    border-color: rgba(167, 139, 250, 0.5);
+    color: #c084fc;
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.15);
+}
+
+.subscription-button.upgrade:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.25), rgba(192, 132, 252, 0.2));
+    border-color: rgba(167, 139, 250, 0.7);
+    box-shadow: 0 0 28px rgba(167, 139, 250, 0.25);
+    transform: translateY(-1px);
+}
+
+.subscription-button.manage {
+    background: rgba(96, 165, 250, 0.08);
+    border-color: rgba(96, 165, 250, 0.4);
+    color: #60a5fa;
+    box-shadow: 0 0 16px rgba(96, 165, 250, 0.1);
+}
+
+.subscription-button.manage:hover:not(:disabled) {
+    background: rgba(96, 165, 250, 0.15);
+    border-color: rgba(96, 165, 250, 0.6);
+    box-shadow: 0 0 24px rgba(96, 165, 250, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Mobile adjustments for subscription */
+@media (max-width: 639px) {
+    .subscription-tier {
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    .subscription-benefits {
+        padding: 1rem;
+    }
+
+    .subscription-benefits li {
+        font-size: 0.875rem;
+    }
+
+    .subscription-button {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.8125rem;
+        max-width: none;
+    }
+
+    .subscription-actions {
+        flex-direction: column;
+    }
+}

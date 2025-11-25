@@ -1,0 +1,247 @@
+/* ============================================
+   AUTH MODAL BACKDROP
+   ============================================ */
+.auth-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+/* ============================================
+   AUTH MODAL CONTAINER (Legacy - kept for backwards compatibility)
+   ============================================ */
+.auth-modal {
+    position: relative;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   SIMPLE AUTH MODAL
+   ============================================ */
+.auth-modal-simple {
+    position: relative;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   CLOSE BUTTON
+   ============================================ */
+.auth-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.auth-modal-close:hover {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+}
+
+/* ============================================
+   TAB SWITCHER
+   ============================================ */
+.auth-modal-tabs {
+    display: flex;
+    border-bottom: 1px solid #1f2937;
+    padding: 0 1.5rem;
+}
+
+.auth-modal-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.auth-modal-tab:hover {
+    color: #9ca3af;
+}
+
+.auth-modal-tab-active {
+    color: #60a5fa;
+}
+
+.auth-modal-tab-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+}
+
+/* ============================================
+   MODAL CONTENT
+   ============================================ */
+.auth-modal-content {
+    padding: 2rem 1.5rem;
+}
+
+/* Override auth form styles when in modal */
+.auth-modal-content .auth-form-container {
+    background: transparent;
+    min-height: unset;
+    padding: 0;
+    display: block;
+}
+
+.auth-modal-content .auth-form-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.auth-modal-content .auth-form-header {
+    display: none; /* Hide header in modal since we have tabs */
+}
+
+.auth-modal-content .auth-form-footer {
+    display: none; /* Hide "Don't have an account?" links since we have tabs */
+}
+
+/* ============================================
+   SIMPLE MODAL CONTENT
+   ============================================ */
+.auth-modal-simple-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+.auth-modal-simple-title {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #d1d5db;
+    letter-spacing: 0.025em;
+    margin: 0;
+}
+
+.auth-modal-simple-description {
+    font-size: 1rem;
+    color: #9ca3af;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0;
+}
+
+/* ============================================
+   SIMPLE MODAL BUTTONS
+   ============================================ */
+.auth-modal-simple-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.auth-modal-button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.auth-modal-button-primary {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    color: #ffffff;
+}
+
+.auth-modal-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
+}
+
+.auth-modal-button-secondary {
+    background: transparent;
+    color: #d1d5db;
+    border: 1px solid #1f2937;
+}
+
+.auth-modal-button-secondary:hover {
+    background: rgba(96, 165, 250, 0.1);
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .auth-modal {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .auth-modal-simple {
+        max-width: 100%;
+        border-radius: 8px;
+        padding: 2rem 1.5rem;
+    }
+
+    .auth-modal-simple-title {
+        font-size: 1.5rem;
+    }
+
+    .auth-modal-simple-description {
+        font-size: 0.9375rem;
+    }
+
+    .auth-modal-backdrop {
+        padding: 0;
+    }
+}

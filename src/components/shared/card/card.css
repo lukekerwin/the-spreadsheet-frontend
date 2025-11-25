@@ -1,0 +1,90 @@
+/* ============================================
+   CARD WRAPPER
+   ============================================ */
+
+.card {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    aspect-ratio: 2.5 / 3.5; /* Trading card aspect ratio */
+
+    /* Transitions */
+    transition: all 0.2s ease;
+}
+
+/* ============================================
+   CARD STATES
+   ============================================ */
+
+/* Clickable cards */
+.card-clickable {
+    cursor: pointer;
+}
+
+.card-clickable:hover {
+    border-color: #60a5fa;
+    transform: translateY(-4px);
+    box-shadow:
+        0 8px 24px rgba(96, 165, 250, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card-clickable:active {
+    transform: translateY(-2px);
+}
+
+/* Focus state for keyboard navigation */
+.card-clickable:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow:
+        0 0 0 3px rgba(96, 165, 250, 0.3),
+        0 8px 24px rgba(96, 165, 250, 0.2);
+}
+
+.card-clickable:focus:not(:focus-visible) {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   CARD GLOW EFFECT (Optional Enhancement)
+   ============================================ */
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #60a5fa, #a78bfa, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-clickable:hover::before {
+    opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+/* Reduce hover effects on touch devices */
+@media (hover: none) {
+    .card-clickable:hover {
+        transform: none;
+    }
+
+    .card-clickable:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Ensure cards don't get too large on huge screens */
+@media (min-width: 1920px) {
+    .card {
+        max-width: 320px;
+    }
+}

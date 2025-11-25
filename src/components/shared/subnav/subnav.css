@@ -1,0 +1,129 @@
+/* ============================================
+   SUBNAV CONTAINER - Glassmorphism matching navbar
+   ============================================ */
+.subnav-container {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid #1f2937;
+}
+
+/* ============================================
+   SUBNAV CONTENT - Max width wrapper (matching navbar)
+   ============================================ */
+.subnav-content {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Responsive padding - matching navbar exactly */
+@media (min-width: 640px) {
+    .subnav-content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .subnav-content {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* Ultra-wide displays - Progressive max-width increase to match content-container */
+@media (min-width: 1440px) {
+    .subnav-content {
+        max-width: 100rem;
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .subnav-content {
+        max-width: 120rem;
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+}
+
+/* ============================================
+   SUBNAV NAV - Tab container
+   ============================================ */
+.subnav-nav {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    height: 2.5rem;
+    align-items: center;
+    /* padding-bottom: 0.5rem; */
+}
+
+.subnav-nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+/* ============================================
+   SUBNAV LINKS - Matching navbar style
+   ============================================ */
+.subnav-link {
+    position: relative;
+    color: #d1d5db;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.subnav-link:hover {
+    color: #fff;
+}
+
+/* Animated underline effect - matching navbar */
+.subnav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    transition: width 0.3s ease;
+}
+
+.subnav-link:hover::after,
+.subnav-link-active::after {
+    width: 100%;
+}
+
+/* Active state */
+.subnav-link-active {
+    color: #fff;
+}
+
+/* Medium screens */
+@media (min-width: 768px) {
+    .subnav-link {
+        font-size: 0.9375rem;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1024px) {
+    .subnav-nav {
+        gap: 2.5rem;
+    }
+
+    .subnav-link {
+        font-size: 1rem;
+    }
+}

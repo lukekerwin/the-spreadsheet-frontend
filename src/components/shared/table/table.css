@@ -1,0 +1,222 @@
+/* ============================================
+   STATS TABLE
+   ============================================ */
+
+.stats-table-container {
+    overflow-x: auto;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--font-rajdhani), sans-serif;
+}
+
+/* ============================================
+   TABLE HEADER
+   ============================================ */
+
+.stats-table thead {
+    background: linear-gradient(to bottom, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.9));
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.stats-table thead tr {
+    border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+}
+
+.stats-table th {
+    text-align: left;
+    padding: 0.5rem 1rem;
+    color: #9ca3af;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    border-bottom: 2px solid #1f2937;
+}
+
+.stats-table th:first-child {
+    padding-left: 1.5rem;
+}
+
+.stats-table th:last-child {
+    padding-right: 1.5rem;
+}
+
+/* Column group separators - dynamically applied via group-boundary class */
+.stats-table thead th.group-boundary {
+    border-right: 2px solid rgba(96, 165, 250, 0.3);
+    position: relative;
+}
+
+.stats-table tbody td.group-boundary {
+    border-right: 2px solid rgba(96, 165, 250, 0.15);
+}
+
+/* ============================================
+   TABLE BODY
+   ============================================ */
+
+.stats-table tbody tr {
+    border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.stats-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.stats-table tbody tr:hover {
+    background: rgba(96, 165, 250, 0.05);
+    border-bottom-color: rgba(96, 165, 250, 0.3);
+}
+
+.stats-table tbody tr:nth-child(even):hover {
+    background: rgba(96, 165, 250, 0.08);
+}
+
+.stats-table td {
+    padding: 0.75rem 1rem;
+    color: #d1d5db;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+}
+
+.stats-table td:first-child {
+    padding-left: 1.5rem;
+    font-weight: 600;
+    color: #9ca3af;
+}
+
+.stats-table td:last-child {
+    padding-right: 1.5rem;
+}
+
+/* ============================================
+   COLUMN SPECIFIC STYLING
+   ============================================ */
+
+/* Sticky column support (via TanStack Table meta) */
+.stats-table th.sticky-column,
+.stats-table td.sticky-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: rgba(17, 24, 39, 0.95);
+}
+
+/* Ensure sticky header has higher z-index */
+.stats-table thead th.sticky-column {
+    z-index: 15;
+}
+
+/* Add shadow to sticky column for depth */
+.stats-table td.sticky-column::after,
+.stats-table th.sticky-column::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(96, 165, 250, 0.2);
+}
+
+/* Player name column - bold and highlighted */
+.stats-table td.sticky-column {
+    font-weight: 700;
+    color: #f3f4f6;
+}
+
+/* Numeric columns - center align */
+.stats-table th:nth-child(n+2),
+.stats-table td:nth-child(n+2) {
+    text-align: center;
+}
+
+/* Stats highlight - removed to avoid incorrect column highlighting */
+
+/* ============================================
+   RATING STYLES - Red to Green Gradient (0-100)
+   ============================================ */
+
+/* Background Gradient Rating Style */
+.rating-bg {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* Unranked: 0-0.00 - Gray */
+.rating-bg.tier-unranked {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+}
+
+/* Excellent: 80-100 - Green */
+.rating-bg.tier-excellent {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(22, 163, 74, 0.2));
+    color: #4ade80;
+}
+
+/* Good: 60-79 - Yellow-Green */
+.rating-bg.tier-good {
+    background: rgba(132, 204, 22, 0.2);
+    color: #a3e635;
+}
+
+/* Average: 40-59 - Gray */
+.rating-bg.tier-average {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+}
+
+/* Below Average: 20-39 - Orange */
+.rating-bg.tier-below-average {
+    background: rgba(249, 115, 22, 0.2);
+    color: #fb923c;
+}
+
+/* Poor: 0-19 - Red */
+.rating-bg.tier-poor {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.2));
+    color: #f87171;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .stats-table-container {
+        margin-top: 1.5rem;
+        border-radius: 4px;
+    }
+
+    .stats-table th,
+    .stats-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .stats-table th:first-child,
+    .stats-table td:first-child {
+        padding-left: 1rem;
+    }
+
+    .stats-table th:last-child,
+    .stats-table td:last-child {
+        padding-right: 1rem;
+    }
+}

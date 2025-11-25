@@ -1,0 +1,457 @@
+/* ============================================
+   CONTAINER
+   ============================================ */
+.sos-barchart-container {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .sos-barchart-container {
+        min-width: 800px;
+        overflow-x: auto;
+    }
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.sos-barchart-title {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .sos-barchart-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* ============================================
+   HEADER & LEGEND
+   ============================================ */
+.sos-barchart-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sos-barchart-legend {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 900px;
+}
+
+.sos-barchart-legend-label {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .sos-barchart-legend-label {
+        display: flex;
+    }
+}
+
+.sos-barchart-legend-arrow {
+    font-size: 1rem;
+    color: #60a5fa;
+}
+
+.sos-barchart-legend-gradient {
+    flex: 1;
+    height: 8px;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    border-radius: 4px;
+}
+
+/* Responsive legend */
+@media (min-width: 768px) {
+    .sos-barchart-legend-label {
+        font-size: 0.875rem;
+    }
+
+    .sos-barchart-legend-gradient {
+        height: 10px;
+    }
+}
+
+/* ============================================
+   LIST
+   ============================================ */
+.sos-barchart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ============================================
+   ROW
+   ============================================ */
+.sos-barchart-row {
+    display: grid;
+    grid-template-columns: auto 1fr 2fr;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.sos-barchart-row:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+    transform: translateX(4px);
+}
+
+/* ============================================
+   RANK
+   ============================================ */
+.sos-barchart-rank {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #9ca3af;
+    min-width: 2rem;
+    text-align: center;
+}
+
+/* ============================================
+   TEAM INFO
+   ============================================ */
+.sos-barchart-team {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0; /* Allow text truncation */
+}
+
+.sos-barchart-logo {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sos-logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sos-barchart-team-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0; /* Allow text truncation */
+}
+
+.sos-barchart-team-name {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sos-barchart-record {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.6875rem;
+    color: #6b7280;
+}
+
+/* ============================================
+   BAR
+   ============================================ */
+.sos-barchart-bar-container {
+    position: relative;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sos-barchart-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.5rem;
+    min-width: 60px;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.sos-barchart-bar-value {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   STATS (Desktop Only)
+   ============================================ */
+.sos-barchart-stats {
+    display: none;
+}
+
+.sos-barchart-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.sos-stat-label {
+    font-size: 0.625rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.sos-stat-value {
+    font-size: 0.8125rem;
+    color: #d1d5db;
+    font-family: var(--font-rajdhani), sans-serif;
+    font-weight: 600;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.sos-barchart-empty {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #9ca3af;
+    font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* ============================================
+   TOOLTIP
+   ============================================ */
+.sos-tooltip {
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 0.75rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    min-width: 200px;
+}
+
+.sos-tooltip-team {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.sos-tooltip-record {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+}
+
+.sos-tooltip-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #60a5fa, #a78bfa, transparent);
+    margin: 0.5rem 0;
+}
+
+.sos-tooltip-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.375rem;
+}
+
+.sos-tooltip-stat:last-child {
+    margin-bottom: 0;
+}
+
+.sos-tooltip-label {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.6875rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sos-tooltip-value {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #60a5fa;
+}
+
+/* ============================================
+   MOBILE TABLE
+   ============================================ */
+.sos-mobile-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.sos-mobile-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.sos-mobile-rank {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.sos-mobile-logo {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sos-mobile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+
+.sos-mobile-team-name {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sos-mobile-record {
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.6875rem;
+    color: #6b7280;
+}
+
+.sos-mobile-rating {
+    font-family: var(--font-rajdhani), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+@media (min-width: 768px) {
+    .sos-barchart-row {
+        grid-template-columns: auto 1fr 2.5fr auto;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .sos-barchart-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .sos-barchart-team-name {
+        font-size: 0.875rem;
+    }
+
+    .sos-barchart-record {
+        font-size: 0.75rem;
+    }
+
+    .sos-barchart-bar {
+        height: 36px;
+    }
+
+    .sos-barchart-bar-value {
+        font-size: 1rem;
+    }
+
+    .sos-barchart-stats {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .sos-barchart-rank {
+        font-size: 1.5rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+@media (min-width: 1024px) {
+    .sos-barchart-row {
+        gap: 1.5rem;
+        padding: 1.25rem;
+    }
+
+    .sos-barchart-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .sos-barchart-team-name {
+        font-size: 0.9375rem;
+    }
+
+    .sos-barchart-bar {
+        height: 40px;
+    }
+
+    .sos-barchart-bar-value {
+        font-size: 1.125rem;
+    }
+
+    .sos-barchart-rank {
+        font-size: 1.75rem;
+        min-width: 3rem;
+    }
+}

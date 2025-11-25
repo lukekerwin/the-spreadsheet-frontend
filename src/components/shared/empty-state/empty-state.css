@@ -1,0 +1,110 @@
+/* ============================================
+   EMPTY STATE CONTAINER
+   ============================================ */
+
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+/* ============================================
+   ICON WRAPPER
+   ============================================ */
+
+/* Icon Wrapper with Gradient Background */
+.empty-state-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(167, 139, 250, 0.1));
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    border-radius: 50%;
+    position: relative;
+}
+
+/* Animated Glow Effect */
+.empty-state-icon-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    filter: blur(12px);
+}
+
+.empty-state-icon-wrapper:hover::before {
+    opacity: 0.4;
+}
+
+/* Icon Styling */
+.empty-state-icon {
+    color: #60a5fa;
+    opacity: 0.8;
+}
+
+/* ============================================
+   TEXT CONTENT
+   ============================================ */
+
+/* Title */
+.empty-state-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    font-family: var(--font-rajdhani), sans-serif;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+/* Description */
+.empty-state-description {
+    color: #9ca3af;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 32rem;
+    margin-bottom: 0;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+    .empty-state-container {
+        padding: 3rem 1rem;
+        margin-top: 2rem;
+    }
+
+    .empty-state-icon-wrapper {
+        width: 96px;
+        height: 96px;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-state-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .empty-state-title {
+        font-size: 1.5rem;
+    }
+
+    .empty-state-description {
+        font-size: 0.875rem;
+    }
+}

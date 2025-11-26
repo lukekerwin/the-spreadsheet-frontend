@@ -1,101 +1,26 @@
 /**
- * API interceptor for handling token refresh and 401 responses
- * Automatically attempts to refresh the token when it expires
+ * API interceptor for handling 401 responses
+ *
+ * Note: JWT tokens don't have a refresh mechanism in this app.
+ * When a token expires (after 30 days), the user must log in again.
+ * This interceptor handles 401 errors by clearing the invalid token.
  */
 
-import { getAuthToken, setAuthToken, removeAuthToken } from '@/lib/auth/tokens';
+import { removeAuthToken } from '@/lib/auth/tokens';
 import { ApiError } from './errors';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-let isRefreshing = false;
-let refreshPromise: Promise<string | null> | null = null;
-
 /**
- * Refresh the authentication token
- * Returns new token or null if refresh fails
- */
-async function refreshAuthToken(): Promise<string | null> {
-    try {
-        const currentToken = getAuthToken();
-
-        if (!currentToken) {
-            return null;
-        }
-
-        const response = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${currentToken}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            removeAuthToken();
-            return null;
-        }
-
-        const data = await response.json();
-
-        if (data.access_token) {
-            setAuthToken(data.access_token);
-            return data.access_token;
-        }
-
-        return null;
-    } catch (error) {
-        console.error('Token refresh failed:', error);
-        removeAuthToken();
-        return null;
-    }
-}
-
-/**
- * Handle 401 response by attempting token refresh
- * If refresh succeeds, retry the original request
- * If refresh fails, clear auth and return null
+ * Handle 401 response by clearing the invalid token
+ * Returns null to signal that the request should not be retried
+ * (user needs to log in again)
  */
 export async function handle401Response(
-    originalRequest: RequestInit,
+    _originalRequest: RequestInit,
 ): Promise<Response | null> {
-    // Prevent multiple simultaneous refresh attempts
-    if (isRefreshing && refreshPromise) {
-        const newToken = await refreshPromise;
-
-        if (!newToken) {
-            return null;
-        }
-
-        // Retry with new token
-        const headers = new Headers(originalRequest.headers);
-        headers.set('Authorization', `Bearer ${newToken}`);
-
-        return null; // Signal to retry the original request
-    }
-
-    // Start refresh process
-    isRefreshing = true;
-
-    refreshPromise = refreshAuthToken()
-        .then((token) => {
-            isRefreshing = false;
-            refreshPromise = null;
-            return token;
-        })
-        .catch((error) => {
-            console.error('Refresh failed:', error);
-            isRefreshing = false;
-            refreshPromise = null;
-            return null;
-        });
-
-    const newToken = await refreshPromise;
-
-    if (!newToken) {
-        return null;
-    }
-
-    return null; // Signal to retry
+    // Token is invalid or expired - clear it
+    // The AuthProvider will detect this and show the login modal
+    removeAuthToken();
+    return null;
 }
 
 /**

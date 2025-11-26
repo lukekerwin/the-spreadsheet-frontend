@@ -138,7 +138,7 @@ export async function getCurrentUser(): Promise<User> {
     const token = getAuthToken();
 
     if (!token) {
-        throw new Error('No authentication token found');
+        throw new ApiError(401, 'No authentication token found');
     }
 
     const response = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
@@ -148,7 +148,14 @@ export async function getCurrentUser(): Promise<User> {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to fetch user information');
+        // Only throw ApiError for auth errors (401/403)
+        // This allows the caller to distinguish between auth failures and transient errors
+        if (response.status === 401 || response.status === 403) {
+            throw new ApiError(response.status, 'Authentication failed');
+        }
+        // For other errors (network, 500, etc.), throw a generic error
+        // but don't signal it as an auth error
+        throw new ApiError(response.status, 'Failed to fetch user information');
     }
 
     return await response.json();

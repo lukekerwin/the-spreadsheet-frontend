@@ -82,14 +82,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser(userData);
         } catch (error) {
             console.error('Failed to fetch user:', error);
-            removeAuthToken();
-            setUser(null);
 
-            // Notify user about session expiration/logout
-            if (error instanceof ApiError && error.isAuthError()) {
+            // Only remove token and log out user for actual authentication errors (401/403)
+            // For transient errors (network issues, server errors), keep the token
+            // so users don't have to re-login due to temporary issues
+            if (error instanceof ApiError && (error.isAuthError() || error.isAuthorizationError())) {
+                removeAuthToken();
+                setUser(null);
                 addNotification('Your session has expired. Please log in again.', 'warning');
             } else {
-                addNotification('Failed to verify your session.', 'error');
+                // For other errors, don't remove the token - just log and continue
+                // The user might still be authenticated, just experiencing a transient issue
+                console.warn('Transient error fetching user, keeping session:', error);
+                // Don't show notification for transient errors on initial load
+                // as it creates a poor UX when the server is just slow
             }
         } finally {
             setIsLoading(false);

@@ -17,6 +17,7 @@ export interface NavLink {
 export interface PageHeaderProps {
     title: string;
     subtitle?: string;
+    action?: React.ReactNode;
 }
 
 /**

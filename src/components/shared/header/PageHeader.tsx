@@ -3,7 +3,7 @@ import { PageHeaderProps } from '@/types/common';
 import './pageheader.css';
 
 
-export default function PageHeader({ title, subtitle }: PageHeaderProps) {
+export default function PageHeader({ title, subtitle, action }: PageHeaderProps) {
     return (
         <div className="page-header">
             <div className="page-header-content">
@@ -17,6 +17,11 @@ export default function PageHeader({ title, subtitle }: PageHeaderProps) {
                         <p className="page-subtitle">
                         {subtitle}
                         </p>
+                    )}
+                    {action && (
+                        <div className="page-header-action">
+                            {action}
+                        </div>
                     )}
                 </div>
             </div>

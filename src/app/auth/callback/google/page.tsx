@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setAuthToken } from '@/lib/auth/tokens';
 import { useAuth } from '@/providers/AuthProvider';
@@ -10,9 +10,14 @@ function GoogleCallbackContent() {
     const searchParams = useSearchParams();
     const { refreshUser } = useAuth();
     const [error, setError] = useState<string | null>(null);
-    const [isProcessing, setIsProcessing] = useState(true);
+    // Track if we've already processed the callback to prevent duplicate requests
+    const hasProcessed = useRef(false);
 
     useEffect(() => {
+        // Prevent duplicate processing if effect re-runs
+        if (hasProcessed.current) return;
+        hasProcessed.current = true;
+
         const processCallback = async () => {
             try {
                 // Get the authorization code from URL params
@@ -50,7 +55,6 @@ function GoogleCallbackContent() {
             } catch (err) {
                 console.error('OAuth callback error:', err);
                 setError(err instanceof Error ? err.message : 'Authentication failed');
-                setIsProcessing(false);
             }
         };
 

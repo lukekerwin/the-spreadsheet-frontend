@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react';
+import { Info } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuth } from '@/providers/AuthProvider';
 import type { FiltersBarItem } from '@/components/shared/filters-bar/FiltersBar';
@@ -19,6 +20,7 @@ import Pagination from '@/components/shared/pagination/Pagination';
 import Card, { PLAYER_TIER_GRADIENTS } from '@/components/cards/Card';
 import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
+import StatsExplanationModal from '@/components/cards/StatsExplanationModal';
 import { SEASONS, LEAGUES, POSITIONS, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { usePlayerCards, usePlayerCardNames, usePublicPlayerCards } from '@/hooks/queries';
 
@@ -45,6 +47,7 @@ export default function PlayersPage() {
     });
     const [selectedPlayers, setSelectedPlayers] = useState<MultiSelectAutocompleteOption[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
 
     // ============================================
     // DEBOUNCE FILTER CHANGES
@@ -216,7 +219,24 @@ export default function PlayersPage() {
                 <PageHeader
                     title="PLAYER CARDS"
                     subtitle={`Last Updated: ${playersData?.lastUpdated ?? ""}`}
+                    action={
+                        <button
+                            className="stats-info-button"
+                            onClick={() => setIsStatsModalOpen(true)}
+                        >
+                            <Info size={16} />
+                            Stats Guide
+                        </button>
+                    }
                 />
+
+                {/* Disclaimer - Position Group Explanation */}
+                <p className='position-disclaimer'>
+                    Cards are grouped by position (C/W/D). Stats are calculated using only games played at that position.
+                    <span className='position-disclaimer-separator'> · </span>
+                    <span className='position-disclaimer-mobile-break'><br /></span>
+                    Minimum games played = 1.5 × weeks completed (e.g., Week 8 = 12 GP minimum).
+                </p>
 
                 {/* Content */}
                 <div className='content-container'>
@@ -269,6 +289,13 @@ export default function PlayersPage() {
                         />
                     )}
                 </div>
+
+                {/* Stats Explanation Modal */}
+                <StatsExplanationModal
+                    isOpen={isStatsModalOpen}
+                    onClose={() => setIsStatsModalOpen(false)}
+                    type="player"
+                />
         </div>
     );
 }

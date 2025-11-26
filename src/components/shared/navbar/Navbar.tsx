@@ -47,6 +47,12 @@ export default function NavigationBar() {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
 
+    // Track isMenuOpen in a ref so event handlers always have the current value
+    const isMenuOpenRef = useRef(isMenuOpen);
+    useEffect(() => {
+        isMenuOpenRef.current = isMenuOpen;
+    }, [isMenuOpen]);
+
     // ============================================
     // EFFECTS
     // ============================================
@@ -67,7 +73,7 @@ export default function NavigationBar() {
     // Close menu on Escape key
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && isMenuOpen) {
+            if (e.key === 'Escape' && isMenuOpenRef.current) {
                 closeMenu();
                 menuButtonRef.current?.focus();
             }
@@ -75,13 +81,13 @@ export default function NavigationBar() {
 
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [isMenuOpen]);
+    }, []);
 
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
-                isMenuOpen &&
+                isMenuOpenRef.current &&
                 mobileMenuRef.current &&
                 !mobileMenuRef.current.contains(e.target as Node) &&
                 !menuButtonRef.current?.contains(e.target as Node)
@@ -92,7 +98,7 @@ export default function NavigationBar() {
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isMenuOpen]);
+    }, []);
 
     // Trap focus inside mobile menu for keyboard navigation
     useEffect(() => {

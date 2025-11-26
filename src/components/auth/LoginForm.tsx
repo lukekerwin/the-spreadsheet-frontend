@@ -59,6 +59,11 @@ export default function LoginForm({ onSuccess, inModal = false }: LoginFormProps
             // Redirect to Google's authorization URL
             if (data.authorization_url) {
                 window.location.href = data.authorization_url;
+                // Reset loading state after a delay in case redirect is blocked
+                // (e.g., by browser extensions or security settings)
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 3000);
             } else {
                 throw new Error('No authorization URL received');
             }

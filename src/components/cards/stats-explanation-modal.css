@@ -1,0 +1,201 @@
+/* ============================================
+   STATS EXPLANATION MODAL - Backdrop
+   ============================================ */
+
+.stats-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1rem;
+    animation: stats-modal-fade-in 0.2s ease;
+}
+
+@keyframes stats-modal-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   STATS EXPLANATION MODAL - Container
+   ============================================ */
+
+.stats-modal {
+    background: linear-gradient(to bottom, rgba(17, 24, 39, 0.98), rgba(0, 0, 0, 0.98));
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    border-radius: 0.75rem;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(96, 165, 250, 0.1);
+    animation: stats-modal-slide-up 0.3s ease;
+}
+
+@keyframes stats-modal-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   STATS EXPLANATION MODAL - Header
+   ============================================ */
+
+.stats-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+.stats-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: var(--font-rajdhani), sans-serif;
+    color: #e5e7eb;
+    margin: 0;
+}
+
+.stats-modal-title svg {
+    color: #60a5fa;
+}
+
+.stats-modal-close {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-modal-close:hover {
+    background: rgba(96, 165, 250, 0.1);
+    color: #60a5fa;
+}
+
+/* ============================================
+   STATS EXPLANATION MODAL - Content
+   ============================================ */
+
+.stats-modal-content {
+    padding: 1rem 1.25rem 1.5rem;
+    overflow-y: auto;
+}
+
+.stats-modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.stats-modal-content::-webkit-scrollbar-track {
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 3px;
+}
+
+.stats-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(96, 165, 250, 0.3);
+    border-radius: 3px;
+}
+
+.stats-modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(96, 165, 250, 0.5);
+}
+
+/* ============================================
+   STATS EXPLANATION MODAL - Grid
+   ============================================ */
+
+.stats-modal-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.stats-modal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(31, 41, 55, 0.3);
+    border-radius: 0.375rem;
+    border: 1px solid rgba(96, 165, 250, 0.1);
+}
+
+.stats-modal-item:hover {
+    border-color: rgba(96, 165, 250, 0.2);
+    background: rgba(31, 41, 55, 0.5);
+}
+
+.stats-modal-stat-name {
+    min-width: 50px;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #60a5fa;
+}
+
+.stats-modal-stat-desc {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+/* ============================================
+   STATS EXPLANATION MODAL - Responsive
+   ============================================ */
+
+@media (max-width: 640px) {
+    .stats-modal {
+        max-height: 90vh;
+    }
+
+    .stats-modal-header {
+        padding: 0.875rem 1rem;
+    }
+
+    .stats-modal-title {
+        font-size: 1rem;
+    }
+
+    .stats-modal-content {
+        padding: 0.875rem 1rem 1.25rem;
+    }
+
+    .stats-modal-item {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .stats-modal-stat-name {
+        min-width: auto;
+    }
+
+    .stats-modal-stat-desc {
+        font-size: 0.75rem;
+    }
+}

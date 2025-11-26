@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react';
+import { Info } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuth } from '@/providers/AuthProvider';
 import type { FiltersBarItem } from '@/components/shared/filters-bar/FiltersBar';
@@ -19,6 +20,7 @@ import Pagination from '@/components/shared/pagination/Pagination';
 import Card, { GOALIE_TIER_GRADIENTS } from '@/components/cards/Card';
 import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
+import StatsExplanationModal from '@/components/cards/StatsExplanationModal';
 import { SEASONS, LEAGUES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { useGoalieCards, useGoalieCardNames, usePublicGoalieCards } from '@/hooks/queries';
 
@@ -42,6 +44,7 @@ export default function GoaliesPage() {
 
     const [selectedGoalies, setSelectedGoalies] = useState<MultiSelectAutocompleteOption[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
 
     // ============================================
     // DEBOUNCE FILTER CHANGES
@@ -187,6 +190,15 @@ export default function GoaliesPage() {
                 <PageHeader
                     title="GOALIE CARDS"
                     subtitle={`Last Updated: ${goaliesData?.lastUpdated ?? ""}`}
+                    action={
+                        <button
+                            className="stats-info-button"
+                            onClick={() => setIsStatsModalOpen(true)}
+                        >
+                            <Info size={16} />
+                            Stats Guide
+                        </button>
+                    }
                 />
 
                 {/* Content */}
@@ -240,6 +252,13 @@ export default function GoaliesPage() {
                         />
                     )}
                 </div>
+
+                {/* Stats Explanation Modal */}
+                <StatsExplanationModal
+                    isOpen={isStatsModalOpen}
+                    onClose={() => setIsStatsModalOpen(false)}
+                    type="goalie"
+                />
         </div>
     );
 }

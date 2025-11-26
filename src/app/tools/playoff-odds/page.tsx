@@ -146,6 +146,7 @@ export default function PlayoffOddsPage() {
                                 <table className='w-full text-sm'>
                                     <thead>
                                         <tr className='border-b border-gray-700'>
+                                            <th className='text-center py-3 px-2 font-semibold text-gray-300 w-8'>#</th>
                                             <th className='text-left py-3 px-3 font-semibold text-gray-300'>Team</th>
                                             <th className='text-center py-3 px-2 font-semibold text-gray-300'>Rec</th>
                                             <th className='text-center py-3 px-2 font-semibold text-gray-300'>Pts</th>
@@ -161,6 +162,9 @@ export default function PlayoffOddsPage() {
                                                 className={`border-b border-gray-800 hover:bg-gray-800/50 transition-colors ${index < 8 ? 'bg-green-900/10' : ''
                                                     }`}
                                             >
+                                                <td className='py-2.5 px-2 text-center text-gray-500 font-mono text-xs'>
+                                                    {index + 1}
+                                                </td>
                                                 <td className='py-2.5 px-3'>
                                                     <div className='flex items-center gap-2'>
                                                         <TeamLogo
@@ -211,14 +215,23 @@ export default function PlayoffOddsPage() {
                             <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
                                 {Array.from(teamsByConference.entries())
                                     .sort(([confIdA], [confIdB]) => confIdA - confIdB)
-                                    .map(([confId, teams]) => (
-                                        <div key={confId}>
-                                            {renderTable(
-                                                teams,
-                                                conferenceNames[confId] || `Conference ${confId}`
-                                            )}
-                                        </div>
-                                    ))}
+                                    .map(([confId, teams]) => {
+                                        // Sort teams by points (desc), then by playoff odds (desc)
+                                        const sortedTeams = [...teams].sort((a, b) => {
+                                            if (b.points !== a.points) {
+                                                return b.points - a.points;
+                                            }
+                                            return b.playoff_odds - a.playoff_odds;
+                                        });
+                                        return (
+                                            <div key={confId}>
+                                                {renderTable(
+                                                    sortedTeams,
+                                                    conferenceNames[confId] || `Conference ${confId}`
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                             </div>
 
                             {/* Footer Info */}

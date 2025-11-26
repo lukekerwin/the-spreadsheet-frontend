@@ -83,17 +83,23 @@ export default function Dropdown({ label, options, onSelect, defaultValue, selec
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Track isOpen in a ref so the event handler always has the current value
+    const isOpenRef = useRef(isOpen);
+    useEffect(() => {
+        isOpenRef.current = isOpen;
+    }, [isOpen]);
+
     // Close dropdown on Escape key
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && isOpen) {
+            if (event.key === 'Escape' && isOpenRef.current) {
                 closeDropdown();
             }
         };
 
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [isOpen]);
+    }, []);
 
     return (
         <div className='dropdown' ref={dropdownRef}>

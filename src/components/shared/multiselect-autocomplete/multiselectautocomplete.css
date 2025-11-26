@@ -83,7 +83,9 @@
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
-    right: 0;
+    min-width: 280px;
+    width: max-content;
+    max-width: 400px;
     background: rgba(17, 24, 39, 0.98);
     border: 1px solid #1f2937;
     border-radius: 0.5rem;
@@ -270,6 +272,12 @@
     .multiselect-autocomplete {
         max-width: 100%;
         width: 100%;
+    }
+
+    .multiselect-autocomplete-dropdown {
+        min-width: 100%;
+        width: 100%;
+        max-width: 100%;
     }
 
     .multiselect-autocomplete-options {

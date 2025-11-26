@@ -105,13 +105,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     // ============================================
     // NAVIGATION HANDLERS
     // ============================================
-    const handleSignIn = async () => {
+    const handleSignIn = () => {
         setIsNavigating(true);
+        onClose();
         router.push('/login');
     };
 
-    const handleSignUp = async () => {
+    const handleSignUp = () => {
         setIsNavigating(true);
+        onClose();
         router.push('/signup');
     };
 

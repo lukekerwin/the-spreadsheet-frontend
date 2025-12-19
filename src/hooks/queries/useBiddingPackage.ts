@@ -5,7 +5,7 @@ import type { BiddingPackageResponse } from '@/types/api';
 import { fetchBiddingPackageData } from '@/lib/api';
 
 interface UseBiddingPackageParams {
-    posGroup?: string;
+    position?: string;
     server?: string;
     console?: string;
     showRostered?: boolean;
@@ -19,7 +19,7 @@ interface UseBiddingPackageParams {
 }
 
 export function useBiddingPackage({
-    posGroup,
+    position,
     server,
     console,
     showRostered = true,
@@ -35,7 +35,7 @@ export function useBiddingPackage({
         queryKey: [
             'biddingPackage',
             {
-                posGroup,
+                position,
                 server,
                 console,
                 showRostered,
@@ -49,7 +49,7 @@ export function useBiddingPackage({
         ],
         queryFn: () =>
             fetchBiddingPackageData({
-                posGroup,
+                position,
                 server,
                 console,
                 showRostered,

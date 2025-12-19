@@ -55,7 +55,7 @@ export interface BiddingPackageResponse {
  * Bidding Package Filter Parameters
  */
 export interface BiddingPackageFilters {
-    posGroup?: string;
+    position?: string;
     server?: string;
     console?: string;
     showRostered?: boolean;

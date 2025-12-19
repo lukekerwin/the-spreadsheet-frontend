@@ -27,11 +27,12 @@ import { getFavorites, toggleFavorite } from '@/lib/api/favorites';
 
 const POS_GROUP_OPTIONS = [
     { label: 'All Positions', value: '' },
-    { label: 'Forwards', value: 'F' },
-    { label: 'Centers', value: 'C' },
-    { label: 'Wingers', value: 'W' },
-    { label: 'Defensemen', value: 'D' },
-    { label: 'Goalies', value: 'G' },
+    { label: 'LW', value: 'LW' },
+    { label: 'C', value: 'C' },
+    { label: 'RW', value: 'RW' },
+    { label: 'LD', value: 'LD' },
+    { label: 'RD', value: 'RD' },
+    { label: 'G', value: 'G' },
 ];
 
 const SERVER_OPTIONS = [
@@ -172,7 +173,7 @@ function BiddingPackageContent() {
     // ============================================
     // FILTER STATE
     // ============================================
-    const [posGroup, setPosGroup] = useState<string>('');
+    const [position, setPosition] = useState<string>('');
     const [server, setServer] = useState<string>('');
     const [consoleFilter, setConsoleFilter] = useState<string>('');
     const [showRostered, setShowRostered] = useState<boolean>(true);
@@ -193,7 +194,7 @@ function BiddingPackageContent() {
     // DATA FETCHING
     // ============================================
     const { data: response, isLoading, error } = useBiddingPackage({
-        posGroup: posGroup || undefined,
+        position: position || undefined,
         server: server || undefined,
         console: consoleFilter || undefined,
         showRostered,
@@ -543,7 +544,7 @@ function BiddingPackageContent() {
                 selectFirstByDefault: true,
                 minWidth: '150px',
                 onChange: (option) => {
-                    setPosGroup(option.value as string);
+                    setPosition(option.value as string);
                     setPageNumber(1);
                 },
             },

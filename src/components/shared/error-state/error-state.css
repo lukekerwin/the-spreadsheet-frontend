@@ -1,0 +1,154 @@
+/* ============================================
+   ERROR STATE CONTAINER
+   ============================================ */
+
+.error-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+/* ============================================
+   ICON WRAPPER
+   ============================================ */
+
+/* Icon Wrapper with Error Gradient Background */
+.error-state-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(249, 115, 22, 0.1));
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 50%;
+    position: relative;
+}
+
+/* Animated Glow Effect */
+.error-state-icon-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    filter: blur(12px);
+}
+
+.error-state-icon-wrapper:hover::before {
+    opacity: 0.3;
+}
+
+/* Icon Styling */
+.error-state-icon {
+    color: #ef4444;
+    opacity: 0.9;
+}
+
+/* ============================================
+   TEXT CONTENT
+   ============================================ */
+
+/* Title */
+.error-state-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    font-family: var(--font-rajdhani), sans-serif;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+/* Description */
+.error-state-description {
+    color: #9ca3af;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 32rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   RETRY BUTTON
+   ============================================ */
+
+.error-state-retry-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(249, 115, 22, 0.1));
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #ef4444;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: var(--font-rajdhani), sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+}
+
+.error-state-retry-button:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(249, 115, 22, 0.2));
+    border-color: rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
+}
+
+.error-state-retry-button:active {
+    transform: translateY(0);
+}
+
+.error-state-retry-button svg {
+    transition: transform 0.3s ease;
+}
+
+.error-state-retry-button:hover svg {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 640px) {
+    .error-state-container {
+        padding: 3rem 1rem;
+        margin-top: 2rem;
+    }
+
+    .error-state-icon-wrapper {
+        width: 96px;
+        height: 96px;
+        margin-bottom: 1.5rem;
+    }
+
+    .error-state-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .error-state-title {
+        font-size: 1.5rem;
+    }
+
+    .error-state-description {
+        font-size: 0.875rem;
+    }
+
+    .error-state-retry-button {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+}

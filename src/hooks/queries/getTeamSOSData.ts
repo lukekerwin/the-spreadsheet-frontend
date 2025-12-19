@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID } from '@/constants/filters';
+import { DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
 import { fetchTeamSOSData } from '@/lib/api/teams';
 
 export interface TeamSOSData {
@@ -24,6 +24,7 @@ export interface TeamSOSData {
 interface GetTeamSOSDataParams {
     seasonId?: number;
     leagueId?: number;
+    gameTypeId?: number;
     weekId?: number;
     gameDow?: number;
     enabled?: boolean;
@@ -32,16 +33,18 @@ interface GetTeamSOSDataParams {
 export function useTeamSOSData({
     seasonId = DEFAULT_SEASON_ID,
     leagueId = DEFAULT_LEAGUE_ID,
+    gameTypeId = DEFAULT_GAME_TYPE_ID,
     weekId = 0,
     gameDow = -1,
     enabled = true,
 }: GetTeamSOSDataParams = {}): UseQueryResult<TeamSOSData[]> {
     return useQuery<TeamSOSData[]>({
-        queryKey: ['teamSOSData', { seasonId, leagueId, weekId, gameDow }],
+        queryKey: ['teamSOSData', { seasonId, leagueId, gameTypeId, weekId, gameDow }],
         queryFn: () =>
             fetchTeamSOSData({
                 seasonId,
                 leagueId,
+                gameTypeId,
                 weekId,
                 gameDow,
             }) as Promise<TeamSOSData[]>,

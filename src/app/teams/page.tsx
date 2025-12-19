@@ -19,7 +19,8 @@ import Pagination from '@/components/shared/pagination/Pagination';
 import Card, { TEAM_TIER_GRADIENTS } from '@/components/cards/Card';
 import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
-import { SEASONS, LEAGUES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
+import ErrorState from '@/components/shared/error-state/ErrorState';
+import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { useTeamCards, useTeamCardNames, usePublicTeamCards } from '@/hooks/queries';
 
 export default function TeamsPage() {
@@ -39,6 +40,10 @@ export default function TeamsPage() {
         value: DEFAULT_LEAGUE_ID,
         label: LEAGUES[0].label,
     });
+    const [selectedGameType, setSelectedGameType] = useState<DropdownOption>({
+        value: DEFAULT_GAME_TYPE_ID,
+        label: GAME_TYPES[0].label,
+    });
     const [selectedTeam, setSelectedTeam] = useState<AutocompleteOption | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -47,6 +52,7 @@ export default function TeamsPage() {
     // ============================================
     const debouncedSeason = useDebounce(selectedSeason, 300);
     const debouncedLeague = useDebounce(selectedLeague, 300);
+    const debouncedGameType = useDebounce(selectedGameType, 300);
 
     // ============================================
     // REACT QUERY - DATA FETCHING
@@ -55,6 +61,7 @@ export default function TeamsPage() {
     const { data: authenticatedTeamsData, isLoading: isLoadingAuth, error: errorAuth, isFetching: isFetchingAuth } = useTeamCards({
         seasonId: Number(debouncedSeason.value),
         leagueId: Number(debouncedLeague.value),
+        gameTypeId: Number(debouncedGameType.value),
         teamId: selectedTeam ? Number(selectedTeam.id) : null,
         pageNumber: currentPage,
         pageSize: DEFAULT_CARD_PAGE_SIZE,
@@ -74,6 +81,7 @@ export default function TeamsPage() {
     const { data: teamNamesData } = useTeamCardNames({
         seasonId: Number(debouncedSeason.value),
         leagueId: Number(debouncedLeague.value),
+        gameTypeId: Number(debouncedGameType.value),
     });
 
     // ============================================
@@ -131,6 +139,23 @@ export default function TeamsPage() {
         setCurrentPage(1);
     };
 
+    const handleGameTypeChange = (option: DropdownOption) => {
+        // Only require auth if value is actually changing (ignore initialization)
+        if (option.value === selectedGameType.value) return;
+
+        if (!isAuthenticated) {
+            openAuthModal(() => {
+                setSelectedGameType(option);
+                setSelectedTeam(null);
+                setCurrentPage(1);
+            });
+            return;
+        }
+        setSelectedGameType(option);
+        setSelectedTeam(null);
+        setCurrentPage(1);
+    };
+
     const handleTeamChange = (option: AutocompleteOption | null) => {
         // Only require auth if value is actually changing (ignore initialization)
         if (option?.id === selectedTeam?.id) return;
@@ -163,6 +188,13 @@ export default function TeamsPage() {
             data: LEAGUES,
             onChange: handleLeagueChange,
             defaultValue: DEFAULT_LEAGUE_ID,
+        },
+        {
+            label: 'Game Type',
+            type: 'dropdown',
+            data: GAME_TYPES,
+            onChange: handleGameTypeChange,
+            defaultValue: DEFAULT_GAME_TYPE_ID,
         },
         {
             label: 'Team Search',
@@ -206,9 +238,7 @@ export default function TeamsPage() {
 
                     {/* Error State */}
                     {error && (
-                        <div className='error-container'>
-                            <p>Error loading teams: {error instanceof Error ? error.message : 'Unknown error'}</p>
-                        </div>
+                        <ErrorState error={error instanceof Error ? error : null} />
                     )}
 
                     {/* Team Cards Grid */}

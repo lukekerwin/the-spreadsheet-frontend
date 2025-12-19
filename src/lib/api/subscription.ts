@@ -12,9 +12,10 @@ import { ApiError, handleResponseError } from './errors';
 // ============================================
 
 export interface SubscriptionStatus {
-    tier: 'free' | 'premium';
+    tier: 'free' | 'subscriber';
     status: 'none' | 'active' | 'canceled' | 'past_due' | 'trialing';
     current_period_end: string | null;
+    cancel_at_period_end: boolean;
     has_premium_access: boolean;
 }
 
@@ -118,6 +119,40 @@ export async function createPortalSession(): Promise<string> {
             throw error;
         }
         throw new ApiError(0, 'Failed to create portal session');
+    }
+}
+
+/**
+ * Create a Stripe Checkout session for purchasing the Bidding Package
+ * Returns a URL to redirect the user to for payment (one-time purchase)
+ */
+export async function purchaseBiddingPackage(): Promise<string> {
+    const token = getAuthToken();
+
+    if (!token) {
+        throw new ApiError(401, 'No authentication token found');
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/subscriptions/purchase-bidding-package`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            await handleResponseError(response, 'Failed to create checkout session');
+        }
+
+        const data: CheckoutResponse = await response.json();
+        return data.checkout_url;
+    } catch (error) {
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw new ApiError(0, 'Failed to create checkout session');
     }
 }
 

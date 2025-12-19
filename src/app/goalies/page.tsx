@@ -20,8 +20,9 @@ import Pagination from '@/components/shared/pagination/Pagination';
 import Card, { GOALIE_TIER_GRADIENTS } from '@/components/cards/Card';
 import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
+import ErrorState from '@/components/shared/error-state/ErrorState';
 import StatsExplanationModal from '@/components/cards/StatsExplanationModal';
-import { SEASONS, LEAGUES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
+import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { useGoalieCards, useGoalieCardNames, usePublicGoalieCards } from '@/hooks/queries';
 
 export default function GoaliesPage() {
@@ -41,6 +42,10 @@ export default function GoaliesPage() {
         value: DEFAULT_LEAGUE_ID,
         label: LEAGUES[0].label,
     });
+    const [selectedGameType, setSelectedGameType] = useState<DropdownOption>({
+        value: DEFAULT_GAME_TYPE_ID,
+        label: GAME_TYPES[0].label,
+    });
 
     const [selectedGoalies, setSelectedGoalies] = useState<MultiSelectAutocompleteOption[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,6 +56,7 @@ export default function GoaliesPage() {
     // ============================================
     const debouncedSeason = useDebounce(selectedSeason, 300);
     const debouncedLeague = useDebounce(selectedLeague, 300);
+    const debouncedGameType = useDebounce(selectedGameType, 300);
 
     // ============================================
     // REACT QUERY - DATA FETCHING
@@ -59,6 +65,7 @@ export default function GoaliesPage() {
     const { data: authenticatedGoaliesData, isLoading: isLoadingAuth, error: errorAuth, isFetching: isFetchingAuth } = useGoalieCards({
         seasonId: Number(debouncedSeason.value),
         leagueId: Number(debouncedLeague.value),
+        gameTypeId: Number(debouncedGameType.value),
         playerIds: selectedGoalies.length > 0 ? selectedGoalies.map(g => Number(g.id)) : undefined,
         pageNumber: currentPage,
         pageSize: DEFAULT_CARD_PAGE_SIZE,
@@ -78,6 +85,7 @@ export default function GoaliesPage() {
     const { data: goalieNamesData } = useGoalieCardNames({
         seasonId: Number(debouncedSeason.value),
         leagueId: Number(debouncedLeague.value),
+        gameTypeId: Number(debouncedGameType.value),
     });
 
     // ============================================
@@ -135,6 +143,23 @@ export default function GoaliesPage() {
         setCurrentPage(1);
     };
 
+    const handleGameTypeChange = (option: DropdownOption) => {
+        // Only require auth if value is actually changing (ignore initialization)
+        if (option.value === selectedGameType.value) return;
+
+        if (!isAuthenticated) {
+            openAuthModal(() => {
+                setSelectedGameType(option);
+                setSelectedGoalies([]);
+                setCurrentPage(1);
+            });
+            return;
+        }
+        setSelectedGameType(option);
+        setSelectedGoalies([]);
+        setCurrentPage(1);
+    };
+
     const handleGoalieChange = (options: MultiSelectAutocompleteOption[]) => {
         if (!isAuthenticated) {
             openAuthModal(() => {
@@ -164,6 +189,13 @@ export default function GoaliesPage() {
             data: LEAGUES,
             onChange: handleLeagueChange,
             defaultValue: DEFAULT_LEAGUE_ID,
+        },
+        {
+            label: 'Game Type',
+            type: 'dropdown',
+            data: GAME_TYPES,
+            onChange: handleGameTypeChange,
+            defaultValue: DEFAULT_GAME_TYPE_ID,
         },
         {
             label: 'Goalie Comparison',
@@ -217,9 +249,7 @@ export default function GoaliesPage() {
 
                     {/* Error State */}
                     {error && (
-                        <div className='error-container'>
-                            <p>Error loading goalies: {error instanceof Error ? error.message : 'Unknown error'}</p>
-                        </div>
+                        <ErrorState error={error instanceof Error ? error : null} />
                     )}
 
                     {/* Goalie Cards Grid */}

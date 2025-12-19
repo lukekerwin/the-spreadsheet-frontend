@@ -21,8 +21,9 @@ import Table from '@/components/shared/table/Table';
 import Pagination from '@/components/shared/pagination/Pagination';
 import TeamLogo from '@/components/shared/logo/TeamLogo';
 import Legend from '@/components/shared/legend/Legend';
+import ErrorState from '@/components/shared/error-state/ErrorState';
 import { getLogoUrl } from '@/utils/logoUrl';
-import { SEASONS, LEAGUES, POSITIONS } from '@/constants/filters';
+import { SEASONS, LEAGUES, POSITIONS, GAME_TYPES, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
 import { usePlayerStats, usePlayerStatsTeams, usePlayerStatsNames } from '@/hooks/queries';
 
 // ============================================
@@ -81,7 +82,7 @@ export default function PlayerStatsPage() {
     // Filter state (initialize from dropdown defaults)
     const [seasonId, setSeasonId] = useState(52);        // Season 52 (first in SEASONS constant)
     const [leagueId, setLeagueId] = useState(37);        // NHL (first in LEAGUES constant)
-    const [gameTypeId] = useState(1);                     // Regular season
+    const [gameTypeId, setGameTypeId] = useState(DEFAULT_GAME_TYPE_ID);  // Game type (1 = Regular, 2 = Playoffs)
     const [posGroup, setPosGroup] = useState('C');       // Centers (first in POSITIONS constant)
     const [teamName, setTeamName] = useState<string | undefined>(undefined);  // Team filter
     const [selectedPlayers, setSelectedPlayers] = useState<MultiSelectAutocompleteOption[]>([]);  // Player search (multi-select)
@@ -462,6 +463,19 @@ export default function PlayerStatsPage() {
                 },
             },
             {
+                label: 'Game Type',
+                type: 'dropdown',
+                data: GAME_TYPES,
+                selectFirstByDefault: true,
+                minWidth: '160px',
+                onChange: (option) => {
+                    setGameTypeId(option.value as number);
+                    setTeamName(undefined); // Reset team filter when game type changes
+                    setSelectedPlayers([]); // Reset player search when game type changes
+                    setPageNumber(1); // Reset to first page on filter change
+                },
+            },
+            {
                 label: 'Team',
                 type: 'dropdown',
                 data: TEAMS,
@@ -471,8 +485,8 @@ export default function PlayerStatsPage() {
                     setTeamName(option.value === '' ? undefined : option.value as string);
                     setPageNumber(1); // Reset to first page on filter change
                 },
-                // Add key based on seasonId and leagueId to force reset when they change
-                key: `team-${seasonId}-${leagueId}`,
+                // Add key based on filters to force reset when they change
+                key: `team-${seasonId}-${leagueId}-${gameTypeId}`,
             } as FiltersBarItem & { key: string },
             {
                 label: 'Position',
@@ -499,7 +513,7 @@ export default function PlayerStatsPage() {
                     setPageNumber(1); // Reset to first page on search
                 },
                 // Add key based on filters to force reset when filters change
-                key: `player-search-${seasonId}-${leagueId}-${posGroup}`,
+                key: `player-search-${seasonId}-${leagueId}-${gameTypeId}-${posGroup}`,
             } as FiltersBarItem & { key: string },
             {
                 label: 'Columns',
@@ -513,7 +527,7 @@ export default function PlayerStatsPage() {
                 },
             }
         ],
-    ], [seasonId, leagueId, posGroup, TEAMS, playerNamesData, selectedPlayers]);
+    ], [seasonId, leagueId, gameTypeId, posGroup, TEAMS, playerNamesData, selectedPlayers]);
 
     // ============================================
     // AUTHENTICATION ENFORCEMENT
@@ -570,9 +584,7 @@ export default function PlayerStatsPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div style={{ padding: '2rem', textAlign: 'center', color: '#f87171' }}>
-                        Error: {error instanceof Error ? error.message : 'Failed to load stats'}
-                    </div>
+                    <ErrorState error={error instanceof Error ? error : null} />
                 )}
 
                 {/* Stats Table */}

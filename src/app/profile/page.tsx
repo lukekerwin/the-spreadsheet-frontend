@@ -36,7 +36,7 @@ function ProfileContent() {
     useEffect(() => {
         const subscription = searchParams.get('subscription');
         if (subscription === 'success') {
-            setSubscriptionMessage('Subscription activated successfully! Welcome to Premium.');
+            setSubscriptionMessage('Subscription activated successfully! Welcome, Subscriber.');
             // Refresh user data to get updated subscription status
             refreshUser();
             // Clear the URL parameter
@@ -187,8 +187,7 @@ function ProfileContent() {
                         </div>
                     </div>
 
-                    {/* Subscription Section - Hidden for now */}
-                    {/* TODO: Re-enable subscription section when ready to launch
+                    {/* Subscription Section */}
                     <div className='profile-section subscription-section'>
                         <h2 className='profile-section-title'>
                             <Crown size={18} />
@@ -206,7 +205,7 @@ function ProfileContent() {
                                 {user.has_premium_access ? (
                                     <>
                                         <Crown size={20} />
-                                        <span>Premium</span>
+                                        <span>Subscriber</span>
                                     </>
                                 ) : (
                                     <>
@@ -216,9 +215,15 @@ function ProfileContent() {
                                 )}
                             </div>
 
-                            {user.subscription_status === 'active' && user.subscription_current_period_end && (
+                            {user.subscription_status === 'active' && user.subscription_current_period_end && !user.subscription_cancel_at_period_end && (
                                 <p className='subscription-renewal'>
                                     Renews on {new Date(user.subscription_current_period_end).toLocaleDateString()}
+                                </p>
+                            )}
+
+                            {user.subscription_status === 'active' && user.subscription_current_period_end && user.subscription_cancel_at_period_end && (
+                                <p className='subscription-renewal canceled'>
+                                    Cancels on {new Date(user.subscription_current_period_end).toLocaleDateString()}
                                 </p>
                             )}
 
@@ -230,15 +235,11 @@ function ProfileContent() {
                         </div>
 
                         <div className='subscription-benefits'>
-                            <h3>Premium Benefits:</h3>
+                            <h3>Subscriber Benefits:</h3>
                             <ul>
                                 <li>
                                     <CheckCircle size={14} />
-                                    Real-time stats updated after every game night
-                                </li>
-                                <li>
-                                    <CheckCircle size={14} />
-                                    Access to advanced analytics immediately
+                                    Access to subscriber tools
                                 </li>
                                 <li>
                                     <CheckCircle size={14} />
@@ -264,12 +265,11 @@ function ProfileContent() {
                                     disabled={isSubscriptionLoading}
                                 >
                                     <Crown size={18} />
-                                    {isSubscriptionLoading ? 'Loading...' : 'Upgrade to Premium'}
+                                    {isSubscriptionLoading ? 'Loading...' : 'Subscribe'}
                                 </button>
                             )}
                         </div>
                     </div>
-                    */}
 
                     {/* Account ID */}
                     <div className='profile-section'>

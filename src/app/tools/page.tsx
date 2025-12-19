@@ -2,7 +2,7 @@
 
 import PageHeader from '@/components/shared/header/PageHeader';
 import ToolCard from '@/components/tools/ToolCard';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, Gavel } from 'lucide-react';
 
 // ============================================
 // TYPES
@@ -13,6 +13,7 @@ interface Tool {
     description: string;
     href: string;
     icon: React.ReactNode;
+    isPremium?: boolean;
 }
 
 // ============================================
@@ -25,6 +26,13 @@ const TOOLS: Tool[] = [
         description: 'See playoff odds calculated by running 10,000 simulations of the regular season',
         href: '/tools/playoff-odds',
         icon: <TrendingUp size={24} />,
+    },
+    {
+        title: 'Bidding Package',
+        description: 'Generate comprehensive bidding packages with player analytics, contract projections, and team fit analysis',
+        href: '/tools/bidding-package',
+        icon: <Gavel size={24} />,
+        isPremium: false,
     },
 ] as const;
 
@@ -50,6 +58,7 @@ export default function ToolsPage() {
                             description={tool.description}
                             href={tool.href}
                             icon={tool.icon}
+                            isPremium={tool.isPremium}
                         />
                     ))}
                 </div>

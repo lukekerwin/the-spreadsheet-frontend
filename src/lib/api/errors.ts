@@ -39,6 +39,18 @@ export class ApiError extends Error {
     }
 
     /**
+     * Check if this is a premium subscription required error
+     */
+    isPremiumRequired(): boolean {
+        if (this.status !== 403) {
+            return false;
+        }
+        // Check if the error message indicates premium is required
+        const message = this.message.toLowerCase();
+        return message.includes('premium') || message.includes('subscription');
+    }
+
+    /**
      * Check if this is a not found error
      */
     isNotFoundError(): boolean {

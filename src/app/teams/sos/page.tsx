@@ -15,7 +15,8 @@ import PageHeader from '@/components/shared/header/PageHeader';
 import SubNav from '@/components/shared/subnav/SubNav';
 import FiltersBar from '@/components/shared/filters-bar/FiltersBar';
 import SOSBarChart from '@/components/sos/SOSBarChart';
-import { SEASONS, LEAGUES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID } from '@/constants/filters';
+import ErrorState from '@/components/shared/error-state/ErrorState';
+import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
 import { useTeamSOSFilters, useTeamSOSData } from '@/hooks/queries';
 
 export default function TeamSOSPage() {
@@ -39,6 +40,10 @@ export default function TeamSOSPage() {
         value: DEFAULT_LEAGUE_ID,
         label: LEAGUES[0].label,
     });
+    const [selectedGameType, setSelectedGameType] = useState<DropdownOption>({
+        value: DEFAULT_GAME_TYPE_ID,
+        label: GAME_TYPES[0].label,
+    });
     const [selectedWeek, setSelectedWeek] = useState<number>(0);
     const [selectedDayOfWeek, setSelectedDayOfWeek] = useState<number>(-1);
 
@@ -48,6 +53,7 @@ export default function TeamSOSPage() {
     const { data: filtersData } = useTeamSOSFilters({
         seasonId: Number(selectedSeason.value),
         leagueId: Number(selectedLeague.value),
+        gameTypeId: Number(selectedGameType.value),
     });
 
     // ============================================
@@ -56,6 +62,7 @@ export default function TeamSOSPage() {
     const { data: sosData, isLoading, error } = useTeamSOSData({
         seasonId: Number(selectedSeason.value),
         leagueId: Number(selectedLeague.value),
+        gameTypeId: Number(selectedGameType.value),
         weekId: selectedWeek,
         gameDow: selectedDayOfWeek,
     });
@@ -69,6 +76,12 @@ export default function TeamSOSPage() {
 
     const handleLeagueChange = (option: DropdownOption) => {
         setSelectedLeague(option);
+    };
+
+    const handleGameTypeChange = (option: DropdownOption) => {
+        setSelectedGameType(option);
+        setSelectedWeek(0);  // Reset week when game type changes
+        setSelectedDayOfWeek(-1);  // Reset day when game type changes
     };
 
     const handleWeekChange = (option: DropdownOption) => {
@@ -98,12 +111,19 @@ export default function TeamSOSPage() {
             defaultValue: DEFAULT_LEAGUE_ID,
         },
         {
+            label: 'Game Type',
+            type: 'dropdown',
+            data: GAME_TYPES,
+            onChange: handleGameTypeChange,
+            defaultValue: DEFAULT_GAME_TYPE_ID,
+        },
+        {
             label: 'Week',
             type: 'dropdown',
             data: filtersData?.weeks || [],
             onChange: handleWeekChange,
             defaultValue: 0,
-            key: `week-${selectedSeason.value}-${selectedLeague.value}`,
+            key: `week-${selectedSeason.value}-${selectedLeague.value}-${selectedGameType.value}`,
         } as FiltersBarItem & { key: string },
         {
             label: 'Day of Week',
@@ -111,9 +131,9 @@ export default function TeamSOSPage() {
             data: filtersData?.days_of_week || [],
             onChange: handleDayOfWeekChange,
             defaultValue: -1,
-            key: `day-${selectedSeason.value}-${selectedLeague.value}`,
+            key: `day-${selectedSeason.value}-${selectedLeague.value}-${selectedGameType.value}`,
         } as FiltersBarItem & { key: string },
-    ], [selectedSeason.value, selectedLeague.value, filtersData]);
+    ], [selectedSeason.value, selectedLeague.value, selectedGameType.value, filtersData]);
 
     // Show loading while checking auth
     if (authLoading) {
@@ -160,9 +180,7 @@ export default function TeamSOSPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div style={{ padding: '2rem', textAlign: 'center', color: '#f87171' }}>
-                        Error loading data: {error instanceof Error ? error.message : 'Unknown error'}
-                    </div>
+                    <ErrorState error={error instanceof Error ? error : null} />
                 )}
 
                 {/* Bar Chart */}

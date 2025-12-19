@@ -31,18 +31,21 @@ export async function fetchTeamCardNames(filters?: FetchTeamCardNamesFilters) {
 export interface FetchTeamSOSFiltersParams {
     seasonId: number;
     leagueId: number;
+    gameTypeId?: number;
 }
 
 export async function fetchTeamSOSFilters(params: FetchTeamSOSFiltersParams) {
     return apiCall('/api/v1/teams/sos/filters', 'GET', undefined, {
         season_id: params.seasonId,
         league_id: params.leagueId,
+        game_type_id: params.gameTypeId ?? 1,
     });
 }
 
 export interface FetchTeamSOSDataParams {
     seasonId: number;
     leagueId: number;
+    gameTypeId?: number;
     weekId?: number;
     gameDow?: number;
 }
@@ -51,6 +54,7 @@ export async function fetchTeamSOSData(params: FetchTeamSOSDataParams) {
     return apiCall('/api/v1/teams/sos/data', 'GET', undefined, {
         season_id: params.seasonId,
         league_id: params.leagueId,
+        game_type_id: params.gameTypeId ?? 1,
         week_id: params.weekId ?? 0,
         game_dow: params.gameDow ?? -1,
     });

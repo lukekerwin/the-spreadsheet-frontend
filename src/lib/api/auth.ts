@@ -20,10 +20,13 @@ export interface User {
     first_name?: string;
     last_name?: string;
     // Subscription fields
-    subscription_tier: 'free' | 'premium';
+    subscription_tier: 'free' | 'subscriber';
     subscription_status: 'none' | 'active' | 'canceled' | 'past_due' | 'trialing';
     subscription_current_period_end?: string;
+    subscription_cancel_at_period_end: boolean;
     has_premium_access: boolean;
+    // One-time purchase access
+    has_bidding_package: boolean;
 }
 
 export interface LoginRequest {

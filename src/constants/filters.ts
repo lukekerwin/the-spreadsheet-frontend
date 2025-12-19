@@ -26,6 +26,11 @@ export const POSITIONS = [
     { label: 'Defensemen', value: 'D' },
 ] as const;
 
+export const GAME_TYPES = [
+    { label: 'Regular Season', value: 1 },
+    { label: 'Playoffs', value: 3 },
+] as const;
+
 // ============================================
 // DEFAULT API PARAMETERS
 // ============================================

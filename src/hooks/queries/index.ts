@@ -18,3 +18,6 @@ export { useTeamSOSData } from './getTeamSOSData';
 export { usePublicPlayerCards } from './getPublicPlayerCards';
 export { usePublicGoalieCards } from './getPublicGoalieCards';
 export { usePublicTeamCards } from './getPublicTeamCards';
+
+// Premium endpoints
+export { useBiddingPackage } from './useBiddingPackage';

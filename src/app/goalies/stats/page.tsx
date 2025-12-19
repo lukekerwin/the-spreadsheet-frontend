@@ -20,8 +20,9 @@ import Table from '@/components/shared/table/Table';
 import Pagination from '@/components/shared/pagination/Pagination';
 import TeamLogo from '@/components/shared/logo/TeamLogo';
 import Legend from '@/components/shared/legend/Legend';
+import ErrorState from '@/components/shared/error-state/ErrorState';
 import { getLogoUrl } from '@/utils/logoUrl';
-import { SEASONS, LEAGUES } from '@/constants/filters';
+import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
 import { useGoalieStats, useGoalieStatsTeams, useGoalieStatsNames } from '@/hooks/queries';
 
 // ============================================
@@ -73,7 +74,7 @@ export default function GoalieStatsPage() {
     // Filter state (initialize from dropdown defaults)
     const [seasonId, setSeasonId] = useState(52);        // Season 52 (first in SEASONS constant)
     const [leagueId, setLeagueId] = useState(37);        // NHL (first in LEAGUES constant)
-    const [gameTypeId] = useState(1);                     // Regular season
+    const [gameTypeId, setGameTypeId] = useState(DEFAULT_GAME_TYPE_ID);  // Game type (1 = Regular, 2 = Playoffs)
     const [teamName, setTeamName] = useState<string | undefined>(undefined);  // Team filter
     const [selectedGoalies, setSelectedGoalies] = useState<MultiSelectAutocompleteOption[]>([]);  // Goalie search (multi-select)
     const [pageNumber, setPageNumber] = useState(1);
@@ -368,6 +369,19 @@ export default function GoalieStatsPage() {
                 },
             },
             {
+                label: 'Game Type',
+                type: 'dropdown',
+                data: GAME_TYPES,
+                selectFirstByDefault: true,
+                minWidth: '160px',
+                onChange: (option) => {
+                    setGameTypeId(option.value as number);
+                    setTeamName(undefined); // Reset team filter when game type changes
+                    setSelectedGoalies([]); // Reset goalie search when game type changes
+                    setPageNumber(1); // Reset to first page on filter change
+                },
+            },
+            {
                 label: 'Team',
                 type: 'dropdown',
                 data: TEAMS,
@@ -377,8 +391,8 @@ export default function GoalieStatsPage() {
                     setTeamName(option.value === '' ? undefined : option.value as string);
                     setPageNumber(1); // Reset to first page on filter change
                 },
-                // Add key based on seasonId and leagueId to force reset when they change
-                key: `team-${seasonId}-${leagueId}`,
+                // Add key based on filters to force reset when they change
+                key: `team-${seasonId}-${leagueId}-${gameTypeId}`,
             } as FiltersBarItem & { key: string },
             {
                 label: 'Goalie Comparison',
@@ -393,7 +407,7 @@ export default function GoalieStatsPage() {
                     setPageNumber(1); // Reset to first page on search
                 },
                 // Add key based on filters to force reset when filters change
-                key: `goalie-search-${seasonId}-${leagueId}`,
+                key: `goalie-search-${seasonId}-${leagueId}-${gameTypeId}`,
             } as FiltersBarItem & { key: string },
             {
                 label: 'Columns',
@@ -407,7 +421,7 @@ export default function GoalieStatsPage() {
                 },
             }
         ],
-    ], [seasonId, leagueId, TEAMS, goalieNamesData, selectedGoalies]);
+    ], [seasonId, leagueId, gameTypeId, TEAMS, goalieNamesData, selectedGoalies]);
 
     // ============================================
     // AUTHENTICATION ENFORCEMENT
@@ -464,9 +478,7 @@ export default function GoalieStatsPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div style={{ padding: '2rem', textAlign: 'center', color: '#f87171' }}>
-                        Error: {error instanceof Error ? error.message : 'Failed to load stats'}
-                    </div>
+                    <ErrorState error={error instanceof Error ? error : null} />
                 )}
 
                 {/* Stats Table */}

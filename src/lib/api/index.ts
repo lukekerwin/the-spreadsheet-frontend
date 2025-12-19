@@ -20,5 +20,8 @@ export { fetchTeamCardNames, type FetchTeamCardNamesFilters } from './teams';
 // Public API
 export { fetchPublicPlayerCards, fetchPublicGoalieCards, fetchPublicTeamCards } from './public';
 
+// Bidding Package API (Premium)
+export { fetchBiddingPackageData } from './biddingPackage';
+
 // HTTP client (rarely used directly)
 export { apiCall } from './client';

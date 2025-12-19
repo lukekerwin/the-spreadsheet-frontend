@@ -18,7 +18,8 @@ import ErrorState from '@/components/shared/error-state/ErrorState';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBiddingPackage } from '@/hooks/queries';
 import { purchaseBiddingPackage } from '@/lib/api/subscription';
-import { Gavel, CheckCircle, ArrowLeft, ExternalLink, Check, X, ShoppingCart } from 'lucide-react';
+import { Gavel, CheckCircle, ExternalLink, Check, X, ShoppingCart, Heart } from 'lucide-react';
+import { getFavorites, toggleFavorite } from '@/lib/api/favorites';
 
 // ============================================
 // CONSTANTS
@@ -128,6 +129,11 @@ function BiddingPackageContent() {
     const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
     const [purchaseMessage, setPurchaseMessage] = useState<string | null>(null);
 
+    // Favorites state
+    const [favorites, setFavorites] = useState<Set<string>>(new Set());
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    const [isFavoritesLoading, setIsFavoritesLoading] = useState(false);
+
     // Check if user has purchased the bidding package
     const hasBiddingPackage = user?.has_bidding_package ?? false;
 
@@ -151,6 +157,17 @@ function BiddingPackageContent() {
             return () => clearTimeout(timer);
         }
     }, [purchaseMessage]);
+
+    // Fetch favorites when user has bidding package
+    useEffect(() => {
+        if (hasBiddingPackage && isAuthenticated) {
+            setIsFavoritesLoading(true);
+            getFavorites()
+                .then((favs) => setFavorites(new Set(favs)))
+                .catch(console.error)
+                .finally(() => setIsFavoritesLoading(false));
+        }
+    }, [hasBiddingPackage, isAuthenticated]);
 
     // ============================================
     // FILTER STATE
@@ -217,6 +234,42 @@ function BiddingPackageContent() {
         router.push('/tools');
     };
 
+    const handleToggleFavorite = async (signupId: string) => {
+        if (!isAuthenticated) {
+            openAuthModal();
+            return;
+        }
+
+        const isFavorite = favorites.has(signupId);
+
+        // Optimistic update
+        setFavorites((prev) => {
+            const next = new Set(prev);
+            if (isFavorite) {
+                next.delete(signupId);
+            } else {
+                next.add(signupId);
+            }
+            return next;
+        });
+
+        try {
+            await toggleFavorite(signupId, isFavorite);
+        } catch (error) {
+            // Revert on error
+            setFavorites((prev) => {
+                const next = new Set(prev);
+                if (isFavorite) {
+                    next.add(signupId);
+                } else {
+                    next.delete(signupId);
+                }
+                return next;
+            });
+            console.error('Failed to toggle favorite:', error);
+        }
+    };
+
     const goToPage = (page: number) => {
         const validPage = Math.max(1, Math.min(page, totalPages));
         setPageNumber(validPage);
@@ -232,6 +285,31 @@ function BiddingPackageContent() {
                 id: 'signup_info',
                 header: 'SIGN UP INFO',
                 columns: [
+                    {
+                        id: 'favorite',
+                        header: '',
+                        size: 40,
+                        enableSorting: false,
+                        cell: (info) => {
+                            const signupId = info.row.original.signup_id;
+                            const isFavorite = favorites.has(signupId);
+                            return (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleToggleFavorite(signupId);
+                                    }}
+                                    className="p-1 hover:bg-gray-700/50 rounded transition-colors"
+                                    title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                                >
+                                    <Heart
+                                        size={16}
+                                        className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-500 hover:text-red-400'}
+                                    />
+                                </button>
+                            );
+                        },
+                    },
                     {
                         accessorKey: 'player_name',
                         header: 'PLAYER',
@@ -449,7 +527,8 @@ function BiddingPackageContent() {
                 ],
             },
         ],
-        []
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [favorites]
     );
 
     // ============================================
@@ -527,6 +606,12 @@ function BiddingPackageContent() {
             },
         ],
     ], []);
+
+    // Filter data by favorites if enabled (must be before any early returns)
+    const displayData = useMemo(() => {
+        if (!showFavoritesOnly) return data;
+        return data.filter((row) => favorites.has(row.signup_id));
+    }, [data, showFavoritesOnly, favorites]);
 
     // ============================================
     // LOADING STATE
@@ -628,7 +713,24 @@ function BiddingPackageContent() {
             <PageHeader title="BIDDING PACKAGE" />
             <div className='content-container'>
                 {/* Filters Bar */}
-                <FiltersBar items={FILTERS_BAR_ITEMS} />
+                <div className='flex items-center gap-4 flex-wrap'>
+                    <div className='flex-1'>
+                        <FiltersBar items={FILTERS_BAR_ITEMS} />
+                    </div>
+                    {/* Favorites Toggle */}
+                    <button
+                        onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                            showFavoritesOnly
+                                ? 'bg-red-500/20 border-red-500/50 text-red-400'
+                                : 'bg-gray-800/50 border-gray-700/50 text-gray-400 hover:text-gray-200 hover:border-gray-600'
+                        }`}
+                        disabled={isFavoritesLoading}
+                    >
+                        <Heart size={16} className={showFavoritesOnly ? 'fill-red-500' : ''} />
+                        <span>Favorites{favorites.size > 0 ? ` (${favorites.size})` : ''}</span>
+                    </button>
+                </div>
 
                 {/* Loading State */}
                 {isLoading && (
@@ -647,7 +749,7 @@ function BiddingPackageContent() {
                 {!isLoading && !error && (
                     <>
                         <Table
-                            data={data}
+                            data={displayData}
                             columns={columns}
                             sorting={sorting}
                             onSortingChange={setSorting}
@@ -655,15 +757,20 @@ function BiddingPackageContent() {
                         />
 
                         {/* Pagination Controls */}
-                        <Pagination
-                            currentPage={pageNumber}
-                            totalPages={totalPages}
-                            onPageChange={goToPage}
-                        />
+                        {!showFavoritesOnly && (
+                            <Pagination
+                                currentPage={pageNumber}
+                                totalPages={totalPages}
+                                onPageChange={goToPage}
+                            />
+                        )}
 
                         {/* Results count */}
                         <div className='text-center text-sm text-gray-500 mt-4'>
-                            Showing {data.length} of {response?.total || 0} signups
+                            {showFavoritesOnly
+                                ? `Showing ${displayData.length} favorited players`
+                                : `Showing ${data.length} of ${response?.total || 0} signups`
+                            }
                         </div>
                     </>
                 )}

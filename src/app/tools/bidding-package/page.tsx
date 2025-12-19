@@ -64,11 +64,11 @@ const SEASON_OPTIONS = [
 
 const LEAGUE_OPTIONS = [
     { label: 'All Leagues', value: '' },
-    { label: 'LGHL', value: '37' },
-    { label: 'LGAHL', value: '38' },
-    { label: 'LGCHL', value: '39' },
-    { label: 'LGECHL', value: '84' },
-    { label: 'LGNCAA', value: '112' },
+    { label: 'NHL', value: '37' },
+    { label: 'AHL', value: '38' },
+    { label: 'CHL', value: '39' },
+    { label: 'ECHL', value: '84' },
+    { label: 'NCAA', value: '112' },
 ];
 
 const FEATURES = [

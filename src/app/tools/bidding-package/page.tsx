@@ -713,11 +713,10 @@ function BiddingPackageContent() {
             <PageHeader title="BIDDING PACKAGE" />
             <div className='content-container'>
                 {/* Filters Bar */}
-                <div className='flex items-center gap-4 flex-wrap'>
-                    <div className='flex-1'>
-                        <FiltersBar items={FILTERS_BAR_ITEMS} />
-                    </div>
-                    {/* Favorites Toggle */}
+                <FiltersBar items={FILTERS_BAR_ITEMS} />
+
+                {/* Favorites Toggle */}
+                <div className='flex justify-start mt-4 mb-2'>
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${

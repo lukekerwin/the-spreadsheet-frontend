@@ -234,19 +234,21 @@ function ProfileContent() {
                             )}
                         </div>
 
-                        <div className='subscription-benefits'>
-                            <h3>Subscriber Benefits:</h3>
-                            <ul>
-                                <li>
-                                    <CheckCircle size={14} />
-                                    Access to subscriber tools
-                                </li>
-                                <li>
-                                    <CheckCircle size={14} />
-                                    Priority support
-                                </li>
-                            </ul>
-                        </div>
+                        {user.has_premium_access && (
+                            <div className='subscription-benefits'>
+                                <h3>Subscriber Benefits:</h3>
+                                <ul>
+                                    <li>
+                                        <CheckCircle size={14} />
+                                        Access to subscriber tools
+                                    </li>
+                                    <li>
+                                        <CheckCircle size={14} />
+                                        Priority support
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
 
                         {/* Subscribe/Manage buttons - hidden while subscription price is inactive */}
                         {user.has_premium_access && (

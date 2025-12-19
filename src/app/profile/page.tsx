@@ -248,8 +248,9 @@ function ProfileContent() {
                             </ul>
                         </div>
 
-                        <div className='subscription-actions'>
-                            {user.has_premium_access ? (
+                        {/* Subscribe/Manage buttons - hidden while subscription price is inactive */}
+                        {user.has_premium_access && (
+                            <div className='subscription-actions'>
                                 <button
                                     onClick={handleManageSubscription}
                                     className='subscription-button manage'
@@ -258,17 +259,8 @@ function ProfileContent() {
                                     <CreditCard size={18} />
                                     {isSubscriptionLoading ? 'Loading...' : 'Manage Subscription'}
                                 </button>
-                            ) : (
-                                <button
-                                    onClick={handleUpgrade}
-                                    className='subscription-button upgrade'
-                                    disabled={isSubscriptionLoading}
-                                >
-                                    <Crown size={18} />
-                                    {isSubscriptionLoading ? 'Loading...' : 'Subscribe'}
-                                </button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Account ID */}

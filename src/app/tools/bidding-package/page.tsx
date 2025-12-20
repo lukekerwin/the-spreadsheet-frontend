@@ -731,7 +731,7 @@ function BiddingPackageContent() {
                 {/* Search and Favorites Row */}
                 <div className='flex flex-col sm:flex-row gap-4 mt-4 mb-2'>
                     {/* Search Input */}
-                    <div className='relative flex-1 max-w-md'>
+                    <div className='relative w-full sm:flex-1 sm:max-w-md'>
                         <Search size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-500' />
                         <input
                             type='text'
@@ -753,7 +753,7 @@ function BiddingPackageContent() {
                     {/* Favorites Toggle */}
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                        className={`w-full sm:w-auto flex items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg border transition-colors ${
                             showFavoritesOnly
                                 ? 'bg-red-500/20 border-red-500/50 text-red-400'
                                 : 'bg-gray-800/50 border-gray-700/50 text-gray-400 hover:text-gray-200 hover:border-gray-600'

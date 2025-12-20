@@ -56,6 +56,8 @@ const getPositionColor = (position: string): string => {
         case 'LD': return 'bg-orange-500/20 text-orange-400';
         case 'RD': return 'bg-red-500/20 text-red-400';
         case 'G': return 'bg-yellow-500/20 text-yellow-400';
+        case 'F': return 'bg-green-500/20 text-green-400';
+        case 'D': return 'bg-orange-500/20 text-orange-400';
         default: return 'bg-gray-500/20 text-gray-400';
     }
 };
@@ -127,6 +129,9 @@ function SeasonRow({ season, isSkater }: { season: PlayerSeasonStats; isSkater: 
             {/* Season Info */}
             <td className='px-4 py-3 text-white font-medium'>S{season.season_id}</td>
             <td className='px-4 py-3 text-gray-300'>{season.league_name || '-'}</td>
+            <td className={`px-4 py-3 text-sm font-medium ${getPositionColor(season.pos_group || '')}`}>
+                {season.pos_group || '-'}
+            </td>
             <td className='px-4 py-3 text-gray-300'>{season.team_name || '-'}</td>
             <td className='px-4 py-3 text-gray-400'>{formatContract(season.contract)}</td>
 
@@ -185,7 +190,7 @@ function SeasonsTable({ seasons, isSkater }: { seasons: PlayerSeasonStats[]; isS
                 <table className='w-full'>
                     <thead>
                         <tr className='bg-gray-900/50 border-b border-gray-700'>
-                            <th colSpan={4} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider'>
+                            <th colSpan={5} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider'>
                                 Season Info
                             </th>
                             <th colSpan={2} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-l border-gray-700'>
@@ -203,6 +208,7 @@ function SeasonsTable({ seasons, isSkater }: { seasons: PlayerSeasonStats[]; isS
                         <tr className='bg-gray-900/30 border-b border-gray-700'>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>Season</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>League</th>
+                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>Pos</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>Team</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>Contract</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>GP</th>

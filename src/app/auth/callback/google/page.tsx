@@ -30,7 +30,12 @@ function GoogleCallbackContent() {
 
                 // Exchange code for access token via backend
                 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://the-spreadsheet-v0-production.up.railway.app';
-                const response = await fetch(`${API_BASE_URL}/api/v1/auth/google/callback?code=${code}&state=${state || ''}`, {
+                // Use URLSearchParams to properly encode the parameters
+                const params = new URLSearchParams({
+                    code: code,
+                    state: state || '',
+                });
+                const response = await fetch(`${API_BASE_URL}/api/v1/auth/google/callback?${params.toString()}`, {
                     method: 'GET',
                     credentials: 'include',
                 });

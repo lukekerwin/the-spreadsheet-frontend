@@ -50,9 +50,8 @@ export function useBiddingPackage({
                 sortOrder,
             },
         ],
-        queryFn: () => {
-            console.log('Fetching bidding package with search:', search);
-            return fetchBiddingPackageData({
+        queryFn: () =>
+            fetchBiddingPackageData({
                 search,
                 position,
                 server,
@@ -64,8 +63,7 @@ export function useBiddingPackage({
                 pageSize,
                 sortBy,
                 sortOrder,
-            });
-        },
+            }),
         enabled,
     });
 }

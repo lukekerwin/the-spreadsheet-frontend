@@ -18,7 +18,7 @@ import ErrorState from '@/components/shared/error-state/ErrorState';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBiddingPackage } from '@/hooks/queries';
 import { purchaseBiddingPackage } from '@/lib/api/subscription';
-import { Gavel, CheckCircle, ExternalLink, Check, X, ShoppingCart, Heart } from 'lucide-react';
+import { Gavel, CheckCircle, ExternalLink, Check, X, ShoppingCart, Heart, Search } from 'lucide-react';
 import { getFavorites, toggleFavorite } from '@/lib/api/favorites';
 
 // ============================================
@@ -173,6 +173,8 @@ function BiddingPackageContent() {
     // ============================================
     // FILTER STATE
     // ============================================
+    const [searchInput, setSearchInput] = useState<string>('');
+    const [search, setSearch] = useState<string>('');
     const [position, setPosition] = useState<string>('');
     const [server, setServer] = useState<string>('');
     const [consoleFilter, setConsoleFilter] = useState<string>('');
@@ -181,6 +183,15 @@ function BiddingPackageContent() {
     const [lastLeagueId, setLastLeagueId] = useState<number | undefined>(undefined);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize] = useState(50);
+
+    // Debounce search input
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSearch(searchInput);
+            setPageNumber(1);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [searchInput]);
 
     // Sorting state
     const [sorting, setSorting] = useState<SortingState>([
@@ -194,6 +205,7 @@ function BiddingPackageContent() {
     // DATA FETCHING
     // ============================================
     const { data: response, isLoading, error } = useBiddingPackage({
+        search: search || undefined,
         position: position || undefined,
         server: server || undefined,
         console: consoleFilter || undefined,
@@ -716,8 +728,29 @@ function BiddingPackageContent() {
                 {/* Filters Bar */}
                 <FiltersBar items={FILTERS_BAR_ITEMS} />
 
-                {/* Favorites Toggle */}
-                <div className='flex justify-start mt-4 mb-2'>
+                {/* Search and Favorites Row */}
+                <div className='flex flex-col sm:flex-row gap-4 mt-4 mb-2'>
+                    {/* Search Input */}
+                    <div className='relative flex-1 max-w-md'>
+                        <Search size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-500' />
+                        <input
+                            type='text'
+                            placeholder='Search player name...'
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            className='w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50'
+                        />
+                        {searchInput && (
+                            <button
+                                onClick={() => setSearchInput('')}
+                                className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300'
+                            >
+                                <X size={16} />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Favorites Toggle */}
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${

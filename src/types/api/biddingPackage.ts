@@ -55,6 +55,7 @@ export interface BiddingPackageResponse {
  * Bidding Package Filter Parameters
  */
 export interface BiddingPackageFilters {
+    search?: string;
     position?: string;
     server?: string;
     console?: string;

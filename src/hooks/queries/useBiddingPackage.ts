@@ -5,6 +5,7 @@ import type { BiddingPackageResponse } from '@/types/api';
 import { fetchBiddingPackageData } from '@/lib/api';
 
 interface UseBiddingPackageParams {
+    search?: string;
     position?: string;
     server?: string;
     console?: string;
@@ -19,6 +20,7 @@ interface UseBiddingPackageParams {
 }
 
 export function useBiddingPackage({
+    search,
     position,
     server,
     console,
@@ -35,6 +37,7 @@ export function useBiddingPackage({
         queryKey: [
             'biddingPackage',
             {
+                search,
                 position,
                 server,
                 console,
@@ -49,6 +52,7 @@ export function useBiddingPackage({
         ],
         queryFn: () =>
             fetchBiddingPackageData({
+                search,
                 position,
                 server,
                 console,

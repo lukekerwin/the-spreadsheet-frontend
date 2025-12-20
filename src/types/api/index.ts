@@ -24,4 +24,11 @@ export type { PlayerStats, PlayerStatsResponse } from './player_stats';
 export type { GoalieStats, GoalieStatsResponse } from './goalie_stats';
 
 // Bidding Package
-export type { BiddingPackageData, BiddingPackageResponse, BiddingPackageFilters } from './biddingPackage';
+export type {
+    BiddingPackageData,
+    BiddingPackageResponse,
+    BiddingPackageFilters,
+    PlayerSeasonStats,
+    PlayerBasicInfo,
+    BiddingPackagePlayerDetail,
+} from './biddingPackage';

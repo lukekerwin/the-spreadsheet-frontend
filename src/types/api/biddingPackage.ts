@@ -67,3 +67,86 @@ export interface BiddingPackageFilters {
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
 }
+
+/**
+ * Player Season Stats - Historical data for one season
+ */
+export interface PlayerSeasonStats {
+    // Season info
+    season_id: number;
+    league_id: number;
+    league_name: string | null;
+    game_type_id: number;
+    pos_group: string;
+
+    // Team info
+    team_id: number | null;
+    team_name: string | null;
+    contract: number | null;
+
+    // Record
+    games_played: number | null;
+    wins: number | null;
+    losses: number | null;
+    ot_losses: number | null;
+
+    // Basic stats (skaters)
+    points: number | null;
+    goals: number | null;
+    assists: number | null;
+    plus_minus: number | null;
+
+    // Advanced stats
+    toi: number | null;
+    shots: number | null;
+    hits: number | null;
+    blocks: number | null;
+    takeaways: number | null;
+    interceptions: number | null;
+    giveaways: number | null;
+    pim: number | null;
+
+    // Expected metrics
+    expected_goals: number | null;
+    expected_assists: number | null;
+    goals_above_expected: number | null;
+    assists_above_expected: number | null;
+
+    // GAR metrics
+    offensive_gar: number | null;
+    defensive_gar: number | null;
+    total_gar: number | null;
+
+    // Ratings (0-1 scale)
+    war_percentile: number | null;
+    offense_percentile: number | null;
+    defense_percentile: number | null;
+    teammate_rating: number | null;
+    opponent_rating: number | null;
+}
+
+/**
+ * Player Basic Info from signup
+ */
+export interface PlayerBasicInfo {
+    player_id: number;
+    player_name: string | null;
+    position: string;
+    pos_group: string;
+    signup_id: string;
+    status: string | null;
+    server: string | null;
+    console: string | null;
+    signup_timestamp: string | null;
+    is_rostered: boolean;
+    current_team_id: number | null;
+    current_team_name: string | null;
+}
+
+/**
+ * Complete player detail response
+ */
+export interface BiddingPackagePlayerDetail {
+    player: PlayerBasicInfo;
+    seasons: PlayerSeasonStats[];
+}

@@ -341,7 +341,12 @@ function BiddingPackageContent() {
                                     >
                                         <ExternalLink size={14} />
                                     </a>
-                                    <span>{info.getValue() as string || 'Unknown'}</span>
+                                    <button
+                                        onClick={() => router.push(`/tools/bidding-package/player/${row.player_id}`)}
+                                        className="text-white hover:text-blue-400 transition-colors text-left"
+                                    >
+                                        {info.getValue() as string || 'Unknown'}
+                                    </button>
                                 </div>
                             );
                         },
@@ -541,7 +546,7 @@ function BiddingPackageContent() {
             },
         ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [favorites]
+        [favorites, router]
     );
 
     // ============================================

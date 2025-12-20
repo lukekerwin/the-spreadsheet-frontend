@@ -21,3 +21,4 @@ export { usePublicTeamCards } from './getPublicTeamCards';
 
 // Premium endpoints
 export { useBiddingPackage } from './useBiddingPackage';
+export { useBiddingPackagePlayer } from './useBiddingPackagePlayer';

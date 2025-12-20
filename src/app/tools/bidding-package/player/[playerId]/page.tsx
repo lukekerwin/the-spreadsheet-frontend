@@ -38,6 +38,16 @@ const formatTOI = (seconds: number | null): string => {
     return `${hours}:${mins.toString().padStart(2, '0')}`;
 };
 
+const formatSavePct = (value: number | null): string => {
+    if (value === null) return '-';
+    return `.${(value * 1000).toFixed(0)}`;
+};
+
+const formatGAA = (value: number | null): string => {
+    if (value === null) return '-';
+    return value.toFixed(2);
+};
+
 const getPercentileColor = (value: number | null): string => {
     if (value === null) return 'text-gray-400';
     const pct = value * 100;
@@ -151,26 +161,52 @@ function SeasonRow({ season, isSkater }: { season: PlayerSeasonStats; isSkater: 
                 </>
             ) : (
                 <>
-                    <td className='px-4 py-3 text-gray-300' colSpan={4}>-</td>
+                    <td className='px-4 py-3 text-white font-medium'>{formatSavePct(season.save_pct)}</td>
+                    <td className='px-4 py-3 text-gray-300'>{formatGAA(season.gaa)}</td>
+                    <td className='px-4 py-3 text-gray-300'>{season.saves ?? '-'}</td>
+                    <td className='px-4 py-3 text-gray-300'>{season.goals_against ?? '-'}</td>
+                    <td className='px-4 py-3 text-gray-300'>{season.shutouts ?? '-'}</td>
                 </>
             )}
 
             {/* Ratings */}
-            <td className={`px-4 py-3 font-medium ${getPercentileColor(season.war_percentile)}`}>
-                {formatPercentile(season.war_percentile)}
-            </td>
-            <td className={`px-4 py-3 ${getPercentileColor(season.offense_percentile)}`}>
-                {formatPercentile(season.offense_percentile)}
-            </td>
-            <td className={`px-4 py-3 ${getPercentileColor(season.defense_percentile)}`}>
-                {formatPercentile(season.defense_percentile)}
-            </td>
-            <td className={`px-4 py-3 ${getPercentileColor(season.teammate_rating)}`}>
-                {formatPercentile(season.teammate_rating)}
-            </td>
-            <td className={`px-4 py-3 ${getPercentileColor(season.opponent_rating)}`}>
-                {formatPercentile(season.opponent_rating)}
-            </td>
+            {isSkater ? (
+                <>
+                    <td className={`px-4 py-3 font-medium ${getPercentileColor(season.war_percentile)}`}>
+                        {formatPercentile(season.war_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.offense_percentile)}`}>
+                        {formatPercentile(season.offense_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.defense_percentile)}`}>
+                        {formatPercentile(season.defense_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.teammate_rating)}`}>
+                        {formatPercentile(season.teammate_rating)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.opponent_rating)}`}>
+                        {formatPercentile(season.opponent_rating)}
+                    </td>
+                </>
+            ) : (
+                <>
+                    <td className={`px-4 py-3 font-medium ${getPercentileColor(season.gsax_percentile)}`}>
+                        {formatPercentile(season.gsax_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.save_pct_percentile)}`}>
+                        {formatPercentile(season.save_pct_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.gaa_percentile)}`}>
+                        {formatPercentile(season.gaa_percentile)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.teammate_rating)}`}>
+                        {formatPercentile(season.teammate_rating)}
+                    </td>
+                    <td className={`px-4 py-3 ${getPercentileColor(season.opponent_rating)}`}>
+                        {formatPercentile(season.opponent_rating)}
+                    </td>
+                </>
+            )}
         </tr>
     );
 }
@@ -196,11 +232,9 @@ function SeasonsTable({ seasons, isSkater }: { seasons: PlayerSeasonStats[]; isS
                             <th colSpan={2} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-l border-gray-700'>
                                 Record
                             </th>
-                            {isSkater && (
-                                <th colSpan={4} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-l border-gray-700'>
-                                    Stats
-                                </th>
-                            )}
+                            <th colSpan={isSkater ? 4 : 5} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-l border-gray-700'>
+                                Stats
+                            </th>
                             <th colSpan={5} className='px-4 py-2 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider border-l border-gray-700'>
                                 Ratings
                             </th>
@@ -213,19 +247,39 @@ function SeasonsTable({ seasons, isSkater }: { seasons: PlayerSeasonStats[]; isS
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>Contract</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>GP</th>
                             <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>W-L-OTL</th>
-                            {isSkater && (
+                            {isSkater ? (
                                 <>
                                     <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>P</th>
                                     <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>G</th>
                                     <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>A</th>
                                     <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>+/-</th>
                                 </>
+                            ) : (
+                                <>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>SV%</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>GAA</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SV</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>GA</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SO</th>
+                                </>
                             )}
-                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>WAR</th>
-                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>OFF</th>
-                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>DEF</th>
-                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>TEAM</th>
-                            <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SOS</th>
+                            {isSkater ? (
+                                <>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>WAR</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>OFF</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>DEF</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>TEAM</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SOS</th>
+                                </>
+                            ) : (
+                                <>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300 border-l border-gray-700'>GSAX</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SV%</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>GAA</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>TEAM</th>
+                                    <th className='px-4 py-2 text-left text-xs font-medium text-gray-300'>SOS</th>
+                                </>
+                            )}
                         </tr>
                     </thead>
                     <tbody>

@@ -96,7 +96,7 @@ export interface PlayerSeasonStats {
     assists: number | null;
     plus_minus: number | null;
 
-    // Advanced stats
+    // Advanced stats (skaters)
     toi: number | null;
     shots: number | null;
     hits: number | null;
@@ -106,16 +106,28 @@ export interface PlayerSeasonStats {
     giveaways: number | null;
     pim: number | null;
 
-    // Expected metrics
+    // Goalie stats
+    shots_against: number | null;
+    saves: number | null;
+    goals_against: number | null;
+    save_pct: number | null;
+    gaa: number | null;
+    shutouts: number | null;
+
+    // Expected metrics (skaters)
     expected_goals: number | null;
     expected_assists: number | null;
     goals_above_expected: number | null;
     assists_above_expected: number | null;
 
-    // GAR metrics
+    // GAR metrics (skaters)
     offensive_gar: number | null;
     defensive_gar: number | null;
     total_gar: number | null;
+
+    // Goalie advanced metrics
+    gsax: number | null;
+    gsaa: number | null;
 
     // Ratings (0-1 scale)
     war_percentile: number | null;
@@ -123,6 +135,10 @@ export interface PlayerSeasonStats {
     defense_percentile: number | null;
     teammate_rating: number | null;
     opponent_rating: number | null;
+    // Goalie-specific percentiles
+    save_pct_percentile: number | null;
+    gaa_percentile: number | null;
+    gsax_percentile: number | null;
 }
 
 /**

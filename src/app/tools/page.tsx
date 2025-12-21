@@ -27,13 +27,13 @@ const TOOLS: Tool[] = [
         href: '/tools/playoff-odds',
         icon: <TrendingUp size={24} />,
     },
-    // {
-    //     title: 'Bidding Package',
-    //     description: 'Generate comprehensive bidding packages with player analytics, contract projections, and team fit analysis',
-    //     href: '/tools/bidding-package',
-    //     icon: <Gavel size={24} />,
-    //     isPremium: false,
-    // },
+    {
+        title: 'Bidding Package',
+        description: 'Generate comprehensive bidding packages with player analytics, contract projections, and team fit analysis',
+        href: '/tools/bidding-package',
+        icon: <Gavel size={24} />,
+        isPremium: false,
+    },
 ] as const;
 
 // ============================================

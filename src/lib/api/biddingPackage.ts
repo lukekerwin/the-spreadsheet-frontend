@@ -13,11 +13,19 @@ import type { BiddingPackageResponse, BiddingPackageFilters, BiddingPackagePlaye
  * @returns Paginated bidding package data
  */
 export async function fetchBiddingPackageData(filters?: BiddingPackageFilters): Promise<BiddingPackageResponse> {
+    // Convert signupIds array to comma-separated string for API
+    const params: Record<string, unknown> = { ...filters };
+    if (filters?.signupIds && filters.signupIds.length > 0) {
+        params.signupIds = filters.signupIds.join(',');
+    } else {
+        delete params.signupIds;
+    }
+
     return apiCall<BiddingPackageResponse>(
         '/api/v1/bidding-package/data',
         'GET',
         undefined,
-        filters as Record<string, unknown> | undefined
+        params
     );
 }
 

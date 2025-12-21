@@ -62,6 +62,7 @@ export interface BiddingPackageFilters {
     showRostered?: boolean;
     lastSeasonId?: number;
     lastLeagueId?: number;
+    signupIds?: string[];
     pageNumber?: number;
     pageSize?: number;
     sortBy?: string;

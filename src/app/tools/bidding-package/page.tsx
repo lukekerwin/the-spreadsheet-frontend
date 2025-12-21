@@ -212,6 +212,7 @@ function BiddingPackageContent() {
         showRostered,
         lastSeasonId,
         lastLeagueId,
+        signupIds: showFavoritesOnly && favorites.size > 0 ? Array.from(favorites) : undefined,
         pageNumber,
         pageSize,
         sortBy,
@@ -625,12 +626,6 @@ function BiddingPackageContent() {
         ],
     ], []);
 
-    // Filter data by favorites if enabled (must be before any early returns)
-    const displayData = useMemo(() => {
-        if (!showFavoritesOnly) return data;
-        return data.filter((row) => favorites.has(row.signup_id));
-    }, [data, showFavoritesOnly, favorites]);
-
     // ============================================
     // LOADING STATE
     // ============================================
@@ -757,7 +752,10 @@ function BiddingPackageContent() {
 
                     {/* Favorites Toggle */}
                     <button
-                        onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                        onClick={() => {
+                            setShowFavoritesOnly(!showFavoritesOnly);
+                            setPageNumber(1);
+                        }}
                         className={`w-full sm:w-auto flex items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg border transition-colors ${
                             showFavoritesOnly
                                 ? 'bg-red-500/20 border-red-500/50 text-red-400'
@@ -787,7 +785,7 @@ function BiddingPackageContent() {
                 {!isLoading && !error && (
                     <>
                         <Table
-                            data={displayData}
+                            data={data}
                             columns={columns}
                             sorting={sorting}
                             onSortingChange={setSorting}
@@ -795,18 +793,16 @@ function BiddingPackageContent() {
                         />
 
                         {/* Pagination Controls */}
-                        {!showFavoritesOnly && (
-                            <Pagination
-                                currentPage={pageNumber}
-                                totalPages={totalPages}
-                                onPageChange={goToPage}
-                            />
-                        )}
+                        <Pagination
+                            currentPage={pageNumber}
+                            totalPages={totalPages}
+                            onPageChange={goToPage}
+                        />
 
                         {/* Results count */}
                         <div className='text-center text-sm text-gray-500 mt-4'>
                             {showFavoritesOnly
-                                ? `Showing ${displayData.length} favorited players`
+                                ? `Showing ${data.length} of ${response?.total || 0} favorited players`
                                 : `Showing ${data.length} of ${response?.total || 0} signups`
                             }
                         </div>

@@ -12,6 +12,7 @@ interface UseBiddingPackageParams {
     showRostered?: boolean;
     lastSeasonId?: number;
     lastLeagueId?: number;
+    signupIds?: string[];
     pageNumber?: number;
     pageSize?: number;
     sortBy?: string;
@@ -27,6 +28,7 @@ export function useBiddingPackage({
     showRostered = true,
     lastSeasonId,
     lastLeagueId,
+    signupIds,
     pageNumber = 1,
     pageSize = 50,
     sortBy = 'war_percentile',
@@ -44,6 +46,7 @@ export function useBiddingPackage({
                 showRostered,
                 lastSeasonId,
                 lastLeagueId,
+                signupIds,
                 pageNumber,
                 pageSize,
                 sortBy,
@@ -59,6 +62,7 @@ export function useBiddingPackage({
                 showRostered,
                 lastSeasonId,
                 lastLeagueId,
+                signupIds,
                 pageNumber,
                 pageSize,
                 sortBy,

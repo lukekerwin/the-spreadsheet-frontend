@@ -5,13 +5,14 @@
  * Shows historical stats and ratings for a specific player
  */
 
-import { use } from 'react';
+import { use, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PageHeader from '@/components/shared/header/PageHeader';
 import ErrorState from '@/components/shared/error-state/ErrorState';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBiddingPackagePlayer } from '@/hooks/queries';
-import { ArrowLeft, User, MapPin, Monitor, Check, X } from 'lucide-react';
+import { ArrowLeft, User, MapPin, Monitor, Check, X, Heart, ExternalLink } from 'lucide-react';
+import { getFavorites, toggleFavorite } from '@/lib/api/favorites';
 import type { PlayerSeasonStats } from '@/types/api';
 
 // ============================================
@@ -72,11 +73,21 @@ const getPositionColor = (position: string): string => {
     }
 };
 
+const getLgProfileUrl = (playerId: number): string => {
+    return `https://leaguegaming.com/forums/index.php?members/${playerId}/`;
+};
+
 // ============================================
 // COMPONENTS
 // ============================================
 
-function PlayerInfoCard({ player }: { player: NonNullable<ReturnType<typeof useBiddingPackagePlayer>['data']>['player'] }) {
+interface PlayerInfoCardProps {
+    player: NonNullable<ReturnType<typeof useBiddingPackagePlayer>['data']>['player'];
+    isFavorite: boolean;
+    onToggleFavorite: () => void;
+}
+
+function PlayerInfoCard({ player, isFavorite, onToggleFavorite }: PlayerInfoCardProps) {
     return (
         <div className='bg-gray-800/50 border border-gray-700/50 rounded-xl p-6 mb-6'>
             <div className='flex flex-col md:flex-row md:items-center gap-6'>
@@ -87,9 +98,30 @@ function PlayerInfoCard({ player }: { player: NonNullable<ReturnType<typeof useB
 
                 {/* Player Info */}
                 <div className='flex-1'>
-                    <h1 className='text-2xl font-bold text-white mb-2'>
-                        {player.player_name || 'Unknown Player'}
-                    </h1>
+                    <div className='flex items-center gap-3 mb-2'>
+                        <h1 className='text-2xl font-bold text-white'>
+                            {player.player_name || 'Unknown Player'}
+                        </h1>
+                        <button
+                            onClick={onToggleFavorite}
+                            className='p-2 hover:bg-gray-700/50 rounded-lg transition-colors'
+                            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                        >
+                            <Heart
+                                size={22}
+                                className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-500 hover:text-red-400'}
+                            />
+                        </button>
+                        <a
+                            href={getLgProfileUrl(player.player_id)}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='p-2 hover:bg-gray-700/50 rounded-lg transition-colors text-gray-500 hover:text-blue-400'
+                            title='View League Gaming profile'
+                        >
+                            <ExternalLink size={22} />
+                        </a>
+                    </div>
                     <div className='flex flex-wrap gap-3'>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPositionColor(player.position)}`}>
                             {player.position}
@@ -313,13 +345,45 @@ export default function BiddingPackagePlayerPage({
     const hasBiddingPackage = user?.has_bidding_package ?? false;
     const playerIdNum = parseInt(playerId, 10);
 
+    // Favorites state
+    const [isFavorite, setIsFavorite] = useState(false);
+
     const { data, isLoading, error } = useBiddingPackagePlayer({
         playerId: playerIdNum,
         enabled: hasBiddingPackage && !isNaN(playerIdNum),
     });
 
+    // Fetch favorites on mount to check if this player is favorited
+    useEffect(() => {
+        if (hasBiddingPackage && isAuthenticated && data?.player.signup_id) {
+            getFavorites()
+                .then((favs) => {
+                    setIsFavorite(favs.includes(data.player.signup_id));
+                })
+                .catch(console.error);
+        }
+    }, [hasBiddingPackage, isAuthenticated, data?.player.signup_id]);
+
     const handleBack = () => {
         router.push('/tools/bidding-package');
+    };
+
+    const handleToggleFavorite = async () => {
+        if (!data?.player.signup_id) return;
+
+        const signupId = data.player.signup_id;
+        const currentlyFavorite = isFavorite;
+
+        // Optimistic update
+        setIsFavorite(!currentlyFavorite);
+
+        try {
+            await toggleFavorite(signupId, currentlyFavorite);
+        } catch (error) {
+            // Revert on error
+            setIsFavorite(currentlyFavorite);
+            console.error('Failed to toggle favorite:', error);
+        }
     };
 
     // Auth loading state
@@ -402,7 +466,11 @@ export default function BiddingPackagePlayerPage({
                 </button>
 
                 {/* Player Info Card */}
-                <PlayerInfoCard player={data.player} />
+                <PlayerInfoCard
+                    player={data.player}
+                    isFavorite={isFavorite}
+                    onToggleFavorite={handleToggleFavorite}
+                />
 
                 {/* Section Title */}
                 <h2 className='text-xl font-semibold text-white mb-4'>Season History</h2>

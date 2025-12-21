@@ -6,12 +6,12 @@ import { fetchBiddingPackageData } from '@/lib/api';
 
 interface UseBiddingPackageParams {
     search?: string;
-    position?: string;
-    server?: string;
-    console?: string;
+    positions?: string[];
+    servers?: string[];
+    consoles?: string[];
     showRostered?: boolean;
-    lastSeasonId?: number;
-    lastLeagueId?: number;
+    lastSeasonIds?: number[];
+    lastLeagueIds?: number[];
     signupIds?: string[];
     pageNumber?: number;
     pageSize?: number;
@@ -22,12 +22,12 @@ interface UseBiddingPackageParams {
 
 export function useBiddingPackage({
     search,
-    position,
-    server,
-    console,
+    positions,
+    servers,
+    consoles,
     showRostered = true,
-    lastSeasonId,
-    lastLeagueId,
+    lastSeasonIds,
+    lastLeagueIds,
     signupIds,
     pageNumber = 1,
     pageSize = 50,
@@ -40,12 +40,12 @@ export function useBiddingPackage({
             'biddingPackage',
             {
                 search,
-                position,
-                server,
-                console,
+                positions,
+                servers,
+                consoles,
                 showRostered,
-                lastSeasonId,
-                lastLeagueId,
+                lastSeasonIds,
+                lastLeagueIds,
                 signupIds,
                 pageNumber,
                 pageSize,
@@ -56,12 +56,12 @@ export function useBiddingPackage({
         queryFn: () =>
             fetchBiddingPackageData({
                 search,
-                position,
-                server,
-                console,
+                positions,
+                servers,
+                consoles,
                 showRostered,
-                lastSeasonId,
-                lastLeagueId,
+                lastSeasonIds,
+                lastLeagueIds,
                 signupIds,
                 pageNumber,
                 pageSize,

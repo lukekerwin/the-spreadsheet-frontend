@@ -56,12 +56,12 @@ export interface BiddingPackageResponse {
  */
 export interface BiddingPackageFilters {
     search?: string;
-    position?: string;
-    server?: string;
-    console?: string;
+    positions?: string[];
+    servers?: string[];
+    consoles?: string[];
     showRostered?: boolean;
-    lastSeasonId?: number;
-    lastLeagueId?: number;
+    lastSeasonIds?: number[];
+    lastLeagueIds?: number[];
     signupIds?: string[];
     pageNumber?: number;
     pageSize?: number;

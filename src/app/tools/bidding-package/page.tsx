@@ -25,8 +25,7 @@ import { getFavorites, toggleFavorite } from '@/lib/api/favorites';
 // CONSTANTS
 // ============================================
 
-const POS_GROUP_OPTIONS = [
-    { label: 'All Positions', value: '' },
+const POSITION_OPTIONS = [
     { label: 'LW', value: 'LW' },
     { label: 'C', value: 'C' },
     { label: 'RW', value: 'RW' },
@@ -36,14 +35,12 @@ const POS_GROUP_OPTIONS = [
 ];
 
 const SERVER_OPTIONS = [
-    { label: 'All Servers', value: '' },
     { label: 'East', value: 'East' },
     { label: 'Central', value: 'Central' },
     { label: 'West', value: 'West' },
 ];
 
 const CONSOLE_OPTIONS = [
-    { label: 'All Consoles', value: '' },
     { label: 'PlayStation', value: 'PS5' },
     { label: 'Xbox', value: 'Xbox Series X|S' },
 ];
@@ -54,21 +51,19 @@ const ROSTER_OPTIONS = [
 ];
 
 const SEASON_OPTIONS = [
-    { label: 'All Seasons', value: '' },
-    { label: 'S52', value: '52' },
-    { label: 'S51', value: '51' },
-    { label: 'S50', value: '50' },
-    { label: 'S49', value: '49' },
-    { label: 'S48', value: '48' },
+    { label: 'S52', value: 52 },
+    { label: 'S51', value: 51 },
+    { label: 'S50', value: 50 },
+    { label: 'S49', value: 49 },
+    { label: 'S48', value: 48 },
 ];
 
 const LEAGUE_OPTIONS = [
-    { label: 'All Leagues', value: '' },
-    { label: 'NHL', value: '37' },
-    { label: 'AHL', value: '38' },
-    { label: 'CHL', value: '39' },
-    { label: 'ECHL', value: '84' },
-    { label: 'NCAA', value: '112' },
+    { label: 'NHL', value: 37 },
+    { label: 'AHL', value: 38 },
+    { label: 'CHL', value: 39 },
+    { label: 'ECHL', value: 84 },
+    { label: 'NCAA', value: 112 },
 ];
 
 const FEATURES = [
@@ -175,12 +170,12 @@ function BiddingPackageContent() {
     // ============================================
     const [searchInput, setSearchInput] = useState<string>('');
     const [search, setSearch] = useState<string>('');
-    const [position, setPosition] = useState<string>('');
-    const [server, setServer] = useState<string>('');
-    const [consoleFilter, setConsoleFilter] = useState<string>('');
+    const [positions, setPositions] = useState<string[]>([]);
+    const [servers, setServers] = useState<string[]>([]);
+    const [consoles, setConsoles] = useState<string[]>([]);
     const [showRostered, setShowRostered] = useState<boolean>(true);
-    const [lastSeasonId, setLastSeasonId] = useState<number | undefined>(undefined);
-    const [lastLeagueId, setLastLeagueId] = useState<number | undefined>(undefined);
+    const [lastSeasonIds, setLastSeasonIds] = useState<number[]>([]);
+    const [lastLeagueIds, setLastLeagueIds] = useState<number[]>([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize] = useState(50);
 
@@ -206,12 +201,12 @@ function BiddingPackageContent() {
     // ============================================
     const { data: response, isLoading, error } = useBiddingPackage({
         search: search || undefined,
-        position: position || undefined,
-        server: server || undefined,
-        console: consoleFilter || undefined,
+        positions: positions.length > 0 ? positions : undefined,
+        servers: servers.length > 0 ? servers : undefined,
+        consoles: consoles.length > 0 ? consoles : undefined,
         showRostered,
-        lastSeasonId,
-        lastLeagueId,
+        lastSeasonIds: lastSeasonIds.length > 0 ? lastSeasonIds : undefined,
+        lastLeagueIds: lastLeagueIds.length > 0 ? lastLeagueIds : undefined,
         signupIds: showFavoritesOnly && favorites.size > 0 ? Array.from(favorites) : undefined,
         pageNumber,
         pageSize,
@@ -557,34 +552,34 @@ function BiddingPackageContent() {
         [
             {
                 label: 'Position',
-                type: 'dropdown',
-                data: POS_GROUP_OPTIONS,
-                selectFirstByDefault: true,
+                type: 'multiselect',
+                data: POSITION_OPTIONS,
+                placeholder: 'All Positions',
                 minWidth: '150px',
-                onChange: (option) => {
-                    setPosition(option.value as string);
+                onChange: (values) => {
+                    setPositions(values as string[]);
                     setPageNumber(1);
                 },
             },
             {
                 label: 'Server',
-                type: 'dropdown',
+                type: 'multiselect',
                 data: SERVER_OPTIONS,
-                selectFirstByDefault: true,
+                placeholder: 'All Servers',
                 minWidth: '130px',
-                onChange: (option) => {
-                    setServer(option.value as string);
+                onChange: (values) => {
+                    setServers(values as string[]);
                     setPageNumber(1);
                 },
             },
             {
                 label: 'Console',
-                type: 'dropdown',
+                type: 'multiselect',
                 data: CONSOLE_OPTIONS,
-                selectFirstByDefault: true,
-                minWidth: '140px',
-                onChange: (option) => {
-                    setConsoleFilter(option.value as string);
+                placeholder: 'All Consoles',
+                minWidth: '150px',
+                onChange: (values) => {
+                    setConsoles(values as string[]);
                     setPageNumber(1);
                 },
             },
@@ -593,7 +588,7 @@ function BiddingPackageContent() {
                 type: 'dropdown',
                 data: ROSTER_OPTIONS,
                 selectFirstByDefault: true,
-                minWidth: '150px',
+                minWidth: '160px',
                 onChange: (option) => {
                     setShowRostered(option.value === 'all');
                     setPageNumber(1);
@@ -601,25 +596,23 @@ function BiddingPackageContent() {
             },
             {
                 label: 'Last Season',
-                type: 'dropdown',
+                type: 'multiselect',
                 data: SEASON_OPTIONS,
-                selectFirstByDefault: true,
-                minWidth: '130px',
-                onChange: (option) => {
-                    const value = option.value as string;
-                    setLastSeasonId(value ? parseInt(value, 10) : undefined);
+                placeholder: 'All Seasons',
+                minWidth: '140px',
+                onChange: (values) => {
+                    setLastSeasonIds(values as number[]);
                     setPageNumber(1);
                 },
             },
             {
                 label: 'Last League',
-                type: 'dropdown',
+                type: 'multiselect',
                 data: LEAGUE_OPTIONS,
-                selectFirstByDefault: true,
-                minWidth: '130px',
-                onChange: (option) => {
-                    const value = option.value as string;
-                    setLastLeagueId(value ? parseInt(value, 10) : undefined);
+                placeholder: 'All Leagues',
+                minWidth: '140px',
+                onChange: (values) => {
+                    setLastLeagueIds(values as number[]);
                     setPageNumber(1);
                 },
             },

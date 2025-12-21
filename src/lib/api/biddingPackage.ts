@@ -13,9 +13,41 @@ import type { BiddingPackageResponse, BiddingPackageFilters, BiddingPackagePlaye
  * @returns Paginated bidding package data
  */
 export async function fetchBiddingPackageData(filters?: BiddingPackageFilters): Promise<BiddingPackageResponse> {
-    // Convert signupIds array to comma-separated string for API
+    // Convert array filters to comma-separated strings for API
     const params: Record<string, unknown> = { ...filters };
-    if (filters?.signupIds && filters.signupIds.length > 0) {
+
+    // Convert array params to comma-separated strings
+    if (filters?.positions?.length) {
+        params.positions = filters.positions.join(',');
+    } else {
+        delete params.positions;
+    }
+
+    if (filters?.servers?.length) {
+        params.servers = filters.servers.join(',');
+    } else {
+        delete params.servers;
+    }
+
+    if (filters?.consoles?.length) {
+        params.consoles = filters.consoles.join(',');
+    } else {
+        delete params.consoles;
+    }
+
+    if (filters?.lastSeasonIds?.length) {
+        params.lastSeasonIds = filters.lastSeasonIds.join(',');
+    } else {
+        delete params.lastSeasonIds;
+    }
+
+    if (filters?.lastLeagueIds?.length) {
+        params.lastLeagueIds = filters.lastLeagueIds.join(',');
+    } else {
+        delete params.lastLeagueIds;
+    }
+
+    if (filters?.signupIds?.length) {
         params.signupIds = filters.signupIds.join(',');
     } else {
         delete params.signupIds;

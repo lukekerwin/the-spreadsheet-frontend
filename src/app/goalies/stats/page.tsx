@@ -66,7 +66,7 @@ const STATS_LEGEND = [
 
 export default function GoalieStatsPage() {
     const router = useRouter();
-    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
     // ============================================
     // STATE
@@ -465,7 +465,7 @@ export default function GoalieStatsPage() {
             {/* Page Header */}
             <PageHeader
                 title="GOALIE STATS"
-                subtitle={`Last Updated: ${response?.lastUpdated ?? ""}`}
+                subtitle={`Last Updated: ${response?.lastUpdated ?? ""} · Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
             />
 
             {/* Content */}

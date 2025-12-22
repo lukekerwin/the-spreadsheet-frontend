@@ -7,6 +7,7 @@ import type { FiltersBarItem } from '@/components/shared/filters-bar/FiltersBar'
 import type { DropdownOption } from '@/components/shared/dropdown/Dropdown';
 import { DEFAULT_LEAGUE_ID, DEFAULT_SEASON_ID } from '@/constants/filters';
 import { usePlayoffOdds } from '@/hooks/usePlayoffOdds';
+import { useAuth } from '@/providers/AuthProvider';
 import TeamLogo from '@/components/shared/logo/TeamLogo';
 import { getLogoUrl } from '@/utils/logoUrl';
 import './playoff-odds.css';
@@ -19,6 +20,11 @@ const LEAGUES = [
 ] as const;
 
 export default function PlayoffOddsPage() {
+    // ============================================
+    // AUTH STATE
+    // ============================================
+    const { user, isAuthenticated, openAuthModal } = useAuth();
+
     // ============================================
     // STATE MANAGEMENT
     // ============================================
@@ -93,6 +99,7 @@ export default function PlayoffOddsPage() {
             {/* Page Header */}
             <PageHeader
                 title="PLAYOFF ODDS"
+                subtitle={`Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
             />
 
             {/* Content */}
@@ -109,12 +116,24 @@ export default function PlayoffOddsPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div className='mt-8 p-4 bg-red-900/20 border border-red-500/50 rounded-lg'>
-                        <div className='text-red-400 font-semibold mb-2'>Error Loading Playoff Odds</div>
-                        <div className='text-red-300 text-sm'>
-                            {error instanceof Error ? error.message : 'Failed to load playoff odds. Please try again later.'}
+                    error instanceof Error && error.message.includes('Unauthorized') ? (
+                        <div className='mt-8 p-4 bg-blue-900/20 border border-blue-500/50 rounded-lg text-center'>
+                            <div className='text-blue-300 mb-3'>Please log in to view playoff odds</div>
+                            <button
+                                onClick={() => openAuthModal()}
+                                className='px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors'
+                            >
+                                Log In
+                            </button>
                         </div>
-                    </div>
+                    ) : (
+                        <div className='mt-8 p-4 bg-red-900/20 border border-red-500/50 rounded-lg'>
+                            <div className='text-red-400 font-semibold mb-2'>Error Loading Playoff Odds</div>
+                            <div className='text-red-300 text-sm'>
+                                {error instanceof Error ? error.message : 'Failed to load playoff odds. Please try again later.'}
+                            </div>
+                        </div>
+                    )
                 )}
 
                 {/* Data Tables - Grouped by Conference */}

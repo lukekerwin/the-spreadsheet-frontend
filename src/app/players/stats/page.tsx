@@ -74,7 +74,7 @@ const STATS_LEGEND = [
 
 export default function PlayerStatsPage() {
     const router = useRouter();
-    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    const { user, isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
     // ============================================
     // STATE
@@ -571,7 +571,7 @@ export default function PlayerStatsPage() {
             {/* Page Header */}
             <PageHeader
                 title="PLAYER STATS"
-                subtitle={`Last Updated: ${response?.lastUpdated ?? ""}`}
+                subtitle={`Last Updated: ${response?.lastUpdated ?? ""} · Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
             />
 
             {/* Content */}

@@ -29,7 +29,7 @@ export default function PlayersPage() {
     // ============================================
     // AUTH STATE
     // ============================================
-    const { isAuthenticated, openAuthModal } = useAuth();
+    const { user, isAuthenticated, openAuthModal } = useAuth();
 
     // ============================================
     // STATE MANAGEMENT
@@ -250,7 +250,7 @@ export default function PlayersPage() {
                 {/* Page Header */}
                 <PageHeader
                     title="PLAYER CARDS"
-                    subtitle={`Last Updated: ${playersData?.lastUpdated ?? ""}`}
+                    subtitle={`Last Updated: ${playersData?.lastUpdated ?? ""} · Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
                     action={
                         <button
                             className="stats-info-button"

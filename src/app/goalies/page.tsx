@@ -29,7 +29,7 @@ export default function GoaliesPage() {
     // ============================================
     // AUTH STATE
     // ============================================
-    const { isAuthenticated, openAuthModal } = useAuth();
+    const { user, isAuthenticated, openAuthModal } = useAuth();
 
     // ============================================
     // STATE MANAGEMENT
@@ -221,7 +221,7 @@ export default function GoaliesPage() {
                 {/* Page Header */}
                 <PageHeader
                     title="GOALIE CARDS"
-                    subtitle={`Last Updated: ${goaliesData?.lastUpdated ?? ""}`}
+                    subtitle={`Last Updated: ${goaliesData?.lastUpdated ?? ""} · Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
                     action={
                         <button
                             className="stats-info-button"

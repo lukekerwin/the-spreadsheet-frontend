@@ -27,7 +27,7 @@ export default function TeamsPage() {
     // ============================================
     // AUTH STATE
     // ============================================
-    const { isAuthenticated, openAuthModal } = useAuth();
+    const { user, isAuthenticated, openAuthModal } = useAuth();
 
     // ============================================
     // STATE MANAGEMENT
@@ -219,7 +219,7 @@ export default function TeamsPage() {
                 {/* Page Header */}
                 <PageHeader
                     title="TEAM CARDS"
-                    subtitle={`Last Updated: ${teamsData?.lastUpdated ?? ""}`}
+                    subtitle={`Last Updated: ${teamsData?.lastUpdated ?? ""} · Refreshes ${user?.has_premium_access ? 'daily' : 'weekly'}`}
                 />
 
                 {/* Content */}

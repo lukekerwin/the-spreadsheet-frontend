@@ -29,7 +29,7 @@ const TOOLS: Tool[] = [
     },
     {
         title: 'Bidding Package',
-        description: 'Generate comprehensive bidding packages with player analytics, contract projections, and team fit analysis',
+        description: 'Every piece of information needed to have a successful bidding. All at your fingertips.',
         href: '/tools/bidding-package',
         icon: <Gavel size={24} />,
         isPremium: false,

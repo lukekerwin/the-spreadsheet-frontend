@@ -639,7 +639,7 @@ function BiddingPackageContent() {
     if (!hasBiddingPackage) {
         return (
             <div className='page-container'>
-                <PageHeader title="BIDDING PACKAGE" />
+                <PageHeader title="BIDDING PACKAGE" subtitle="" />
                 <div className='content-container'>
                     {/* Back Button */}
                     <button
@@ -716,7 +716,7 @@ function BiddingPackageContent() {
     // ============================================
     return (
         <div className='page-container'>
-            <PageHeader title="BIDDING PACKAGE" />
+            <PageHeader title="BIDDING PACKAGE" subtitle={`Last Updated: ${response?.lastUpdated ?? ""}`} />
             <div className='content-container'>
                 {/* Filters Bar */}
                 <FiltersBar items={FILTERS_BAR_ITEMS} />

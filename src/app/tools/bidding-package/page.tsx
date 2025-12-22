@@ -387,8 +387,8 @@ function BiddingPackageContent() {
                     },
                     {
                         accessorKey: 'signup_timestamp',
-                        header: 'SIGNED UP',
-                        size: 110,
+                        header: 'SIGNED UP (EST)',
+                        size: 120,
                         cell: (info) => {
                             const val = info.getValue() as string | null;
                             if (!val) return '-';
@@ -720,7 +720,7 @@ function BiddingPackageContent() {
     // ============================================
     return (
         <div className='page-container'>
-            <PageHeader title="BIDDING PACKAGE" subtitle={`Last Updated: ${response?.lastUpdated ?? ""}`} />
+            <PageHeader title="BIDDING PACKAGE" subtitle={`Last Updated: ${response?.lastUpdated ? `${response.lastUpdated} EST` : ""}`} />
             <div className='content-container'>
                 {/* Filters Bar */}
                 <FiltersBar items={FILTERS_BAR_ITEMS} />

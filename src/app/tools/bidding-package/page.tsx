@@ -190,7 +190,7 @@ function BiddingPackageContent() {
 
     // Sorting state
     const [sorting, setSorting] = useState<SortingState>([
-        { id: 'war_percentile', desc: true }
+        { id: 'signup_timestamp', desc: true }
     ]);
 
     const sortBy = sorting.length > 0 ? sorting[0].id : 'war_percentile';
@@ -386,16 +386,20 @@ function BiddingPackageContent() {
                         },
                     },
                     {
-                        accessorKey: 'is_rostered',
-                        header: 'ROSTER',
-                        size: 80,
+                        accessorKey: 'signup_timestamp',
+                        header: 'SIGNED UP',
+                        size: 110,
                         cell: (info) => {
-                            const isRostered = info.getValue() as boolean;
-                            return isRostered ? (
-                                <Check size={16} className="text-green-400" />
-                            ) : (
-                                <X size={16} className="text-gray-500" />
-                            );
+                            const val = info.getValue() as string | null;
+                            if (!val) return '-';
+                            const date = new Date(val);
+                            const month = date.getMonth() + 1;
+                            const day = date.getDate();
+                            const hours = date.getHours();
+                            const minutes = date.getMinutes().toString().padStart(2, '0');
+                            const ampm = hours >= 12 ? 'PM' : 'AM';
+                            const displayHours = hours % 12 || 12;
+                            return `${month}/${day} ${displayHours}:${minutes} ${ampm}`;
                         },
                     },
                 ],

@@ -459,7 +459,7 @@ export default function BiddingPackagePlayerPage({
                 {/* Back Button */}
                 <button
                     onClick={handleBack}
-                    className='inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg mb-6 transition-colors'
+                    className='inline-flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg mt-6 mb-6 transition-colors'
                 >
                     <ArrowLeft size={16} />
                     Back to Bidding Package

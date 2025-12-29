@@ -59,6 +59,7 @@ export interface BiddingPackageFilters {
     positions?: string[];
     servers?: string[];
     consoles?: string[];
+    statuses?: string[];
     showRostered?: boolean;
     lastSeasonIds?: number[];
     lastLeagueIds?: number[];

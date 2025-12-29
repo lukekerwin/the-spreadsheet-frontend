@@ -9,6 +9,7 @@ interface UseBiddingPackageParams {
     positions?: string[];
     servers?: string[];
     consoles?: string[];
+    statuses?: string[];
     showRostered?: boolean;
     lastSeasonIds?: number[];
     lastLeagueIds?: number[];
@@ -25,6 +26,7 @@ export function useBiddingPackage({
     positions,
     servers,
     consoles,
+    statuses,
     showRostered = true,
     lastSeasonIds,
     lastLeagueIds,
@@ -43,6 +45,7 @@ export function useBiddingPackage({
                 positions,
                 servers,
                 consoles,
+                statuses,
                 showRostered,
                 lastSeasonIds,
                 lastLeagueIds,
@@ -59,6 +62,7 @@ export function useBiddingPackage({
                 positions,
                 servers,
                 consoles,
+                statuses,
                 showRostered,
                 lastSeasonIds,
                 lastLeagueIds,

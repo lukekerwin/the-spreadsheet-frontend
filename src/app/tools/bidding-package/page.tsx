@@ -45,6 +45,13 @@ const CONSOLE_OPTIONS = [
     { label: 'Xbox', value: 'Xbox Series X|S' },
 ];
 
+const STATUS_OPTIONS = [
+    { label: 'Veteran', value: 'Veteran' },
+    { label: 'Prospect', value: 'Prospect' },
+    { label: 'Amateur', value: 'Amateur' },
+    { label: 'Draft Pick', value: 'Draft Pick' },
+];
+
 const ROSTER_OPTIONS = [
     { label: 'All Players', value: 'all' },
     { label: 'Bidding Eligible', value: 'free' },
@@ -173,6 +180,7 @@ function BiddingPackageContent() {
     const [positions, setPositions] = useState<string[]>([]);
     const [servers, setServers] = useState<string[]>([]);
     const [consoles, setConsoles] = useState<string[]>([]);
+    const [statuses, setStatuses] = useState<string[]>([]);
     const [showRostered, setShowRostered] = useState<boolean>(true);
     const [lastSeasonIds, setLastSeasonIds] = useState<number[]>([]);
     const [lastLeagueIds, setLastLeagueIds] = useState<number[]>([]);
@@ -204,6 +212,7 @@ function BiddingPackageContent() {
         positions: positions.length > 0 ? positions : undefined,
         servers: servers.length > 0 ? servers : undefined,
         consoles: consoles.length > 0 ? consoles : undefined,
+        statuses: statuses.length > 0 ? statuses : undefined,
         showRostered,
         lastSeasonIds: lastSeasonIds.length > 0 ? lastSeasonIds : undefined,
         lastLeagueIds: lastLeagueIds.length > 0 ? lastLeagueIds : undefined,
@@ -584,6 +593,17 @@ function BiddingPackageContent() {
                 minWidth: '150px',
                 onChange: (values) => {
                     setConsoles(values as string[]);
+                    setPageNumber(1);
+                },
+            },
+            {
+                label: 'Status',
+                type: 'multiselect',
+                data: STATUS_OPTIONS,
+                placeholder: 'All Statuses',
+                minWidth: '140px',
+                onChange: (values) => {
+                    setStatuses(values as string[]);
                     setPageNumber(1);
                 },
             },

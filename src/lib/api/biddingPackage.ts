@@ -35,6 +35,12 @@ export async function fetchBiddingPackageData(filters?: BiddingPackageFilters): 
         delete params.consoles;
     }
 
+    if (filters?.statuses?.length) {
+        params.statuses = filters.statuses.join(',');
+    } else {
+        delete params.statuses;
+    }
+
     if (filters?.lastSeasonIds?.length) {
         params.lastSeasonIds = filters.lastSeasonIds.join(',');
     } else {

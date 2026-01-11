@@ -28,7 +28,7 @@ export const POSITIONS = [
 
 export const GAME_TYPES = [
     { label: 'Regular Season', value: 1 },
-    { label: 'Playoffs', value: 3 },
+    { label: 'Playoffs', value: 2 },
 ] as const;
 
 // ============================================

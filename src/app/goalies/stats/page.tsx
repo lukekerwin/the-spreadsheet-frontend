@@ -22,7 +22,7 @@ import TeamLogo from '@/components/shared/logo/TeamLogo';
 import Legend from '@/components/shared/legend/Legend';
 import ErrorState from '@/components/shared/error-state/ErrorState';
 import { getLogoUrl } from '@/utils/logoUrl';
-import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
+import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_GAME_TYPE_ID } from '@/constants/filters';
 import { useGoalieStats, useGoalieStatsTeams, useGoalieStatsNames } from '@/hooks/queries';
 
 // ============================================
@@ -72,7 +72,7 @@ export default function GoalieStatsPage() {
     // STATE
     // ============================================
     // Filter state (initialize from dropdown defaults)
-    const [seasonId, setSeasonId] = useState(52);        // Season 52 (first in SEASONS constant)
+    const [seasonId, setSeasonId] = useState(DEFAULT_SEASON_ID);        // Current season (first in SEASONS constant)
     const [leagueId, setLeagueId] = useState(37);        // NHL (first in LEAGUES constant)
     const [gameTypeId, setGameTypeId] = useState(DEFAULT_GAME_TYPE_ID);  // Game type (1 = Regular, 2 = Playoffs)
     const [teamName, setTeamName] = useState<string | undefined>(undefined);  // Team filter

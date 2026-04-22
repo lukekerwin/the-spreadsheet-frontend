@@ -473,6 +473,16 @@ function BiddingPackageContent() {
                             return val ?? '-';
                         },
                     },
+                    {
+                        accessorKey: 'last_contract',
+                        header: 'CTR',
+                        size: 80,
+                        cell: (info) => {
+                            const val = info.getValue() as number | null;
+                            if (val === null || val === undefined) return '-';
+                            return `${(val / 1000000).toFixed(2)}M`;
+                        },
+                    },
                 ],
             },
             {

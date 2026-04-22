@@ -30,6 +30,9 @@ export interface BiddingPackageData {
     ot_losses: number | null;
     points: number | null;
 
+    // Contract
+    last_contract: number | null;
+
     // Ratings (0-1 scale, multiply by 100 for display)
     war_percentile: number | null;
     team_percentile: number | null;

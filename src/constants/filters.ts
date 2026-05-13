@@ -3,6 +3,7 @@
 // ============================================
 
 export const SEASONS = [
+    { label: 'Season 54', value: 54 },
     { label: 'Season 53', value: 53 },
     { label: 'Season 52', value: 52 },
     { label: 'Season 51', value: 51 },
@@ -38,9 +39,9 @@ export const GAME_TYPES = [
 
 /**
  * Default season ID for API requests
- * Current season: 2025-26 (Season 53)
+ * Current season: Season 54
  */
-export const DEFAULT_SEASON_ID = 53;
+export const DEFAULT_SEASON_ID = 54;
 
 /**
  * Default league ID for API requests

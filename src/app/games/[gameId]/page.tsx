@@ -11,8 +11,12 @@ import { ArrowLeft } from 'lucide-react';
 import TeamLogo from '@/components/shared/logo/TeamLogo';
 import ErrorState from '@/components/shared/error-state/ErrorState';
 import { useGameDetail } from '@/hooks/queries/getGameDetail';
-import type { TeamBreakdown, SkaterLine } from '@/types/api/games';
+import type { TeamBreakdown, SkaterLine, GoalieLine } from '@/types/api/games';
 import './gamedetail.css';
+
+// roster sort order
+const POS_ORDER: Record<string, number> = { LW: 0, C: 1, RW: 2, LD: 3, RD: 4 };
+const posRank = (p: string | null) => (p && p in POS_ORDER ? POS_ORDER[p] : 99);
 
 const n = (v: number | null | undefined) => (v == null ? '–' : String(v));
 const f1 = (v: number | null | undefined) => (v == null ? '–' : Number(v).toFixed(1));
@@ -159,6 +163,39 @@ function SkaterTable({ team, skaters }: { team: TeamBreakdown; skaters: SkaterLi
     );
 }
 
+function GoalieTable({ goalies }: { goalies: GoalieLine[] }) {
+    if (!goalies.length) return null;
+    return (
+        <div className="gd-panel gd-goalie-panel">
+            <div className="gd-panel__head">Goaltending</div>
+            <div className="gd-scroll">
+                <table className="sk-table">
+                    <thead>
+                        <tr>
+                            <th className="l">Goalie</th>
+                            <th>TOI</th><th>SA</th><th>SV</th><th>GA</th><th>SV%</th><th>SO</th><th>GSAx</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {goalies.map((g) => (
+                            <tr key={g.playerId}>
+                                <td className="l"><span className="sk-name">{g.playerName}</span></td>
+                                <td className="dim">{toiFmt(g.toi)}</td>
+                                <td>{n(g.shotsAgainst)}</td>
+                                <td className="b">{n(g.saves)}</td>
+                                <td>{n(g.goalsAgainst)}</td>
+                                <td className="b">{g.svPct != null ? `${(Number(g.svPct) * 100).toFixed(1)}%` : '–'}</td>
+                                <td>{n(g.shutouts)}</td>
+                                <td className="gar">{f2(g.gsax)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
 export default function GameDetailPage({ params }: { params: Promise<{ gameId: string }> }) {
     const { gameId } = use(params);
     const { data, isLoading, error } = useGameDetail(Number(gameId));
@@ -172,7 +209,11 @@ export default function GameDetailPage({ params }: { params: Promise<{ gameId: s
     const { header, homeTeam, awayTeam } = data;
     const rec = (t: TeamBreakdown) => (t.teamWins != null ? `${t.teamWins}-${t.teamLosses}-${t.teamOtl}` : '');
     const activeTeam = tab === 'home' ? homeTeam : awayTeam;
-    const activeSkaters = tab === 'home' ? data.homeSkaters : data.awaySkaters;
+    const activeGoalies = tab === 'home' ? data.homeGoalies : data.awayGoalies;
+    // roster order: LW, C, RW, LD, RD (then points as tiebreaker)
+    const activeSkaters = [...(tab === 'home' ? data.homeSkaters : data.awaySkaters)].sort(
+        (a, b) => posRank(a.position) - posRank(b.position) || (b.points ?? 0) - (a.points ?? 0),
+    );
 
     return (
         <div className="page-container gd">
@@ -222,6 +263,7 @@ export default function GameDetailPage({ params }: { params: Promise<{ gameId: s
                     </div>
 
                     <SkaterTable team={activeTeam} skaters={activeSkaters} />
+                    <GoalieTable goalies={activeGoalies} />
                 </div>
             </div>
         </div>

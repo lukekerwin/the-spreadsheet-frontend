@@ -88,6 +88,8 @@
 .sk-table .pos { color: #4ade80; font-weight: 600; }
 .sk-table .neg { color: #f87171; font-weight: 600; }
 
+.gd-goalie-panel { margin-top: 12px; }
+
 /* ---- Rating badges (match site rating-bg tiers) ---- */
 .gd-rt { display: inline-block; min-width: 32px; padding: 3px 8px; border-radius: 4px; font-family: var(--font-jetbrains-mono), monospace; font-size: 12px; font-weight: 700; }
 .gd-rt.t-exc { background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(22, 163, 74, 0.2)); color: #4ade80; }

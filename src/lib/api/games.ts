@@ -21,7 +21,7 @@ export async function fetchGames(filters: FetchGamesFilters): Promise<GamesRespo
         '/api/v1/games/cards',
         'GET',
         undefined,
-        filters as Record<string, unknown>,
+        filters as unknown as Record<string, unknown>,
     );
 }
 

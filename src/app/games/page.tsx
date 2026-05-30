@@ -67,10 +67,10 @@ export default function GamesPage() {
     };
 
     const FILTERS: FiltersBarItem[] = [
-        { label: 'Season', type: 'dropdown', data: seasonOptions, onChange: handleSeason, defaultValue: resolvedSeason },
+        { label: 'Season', type: 'dropdown', data: seasonOptions, onChange: handleSeason, defaultValue: resolvedSeason ?? undefined },
         { label: 'League', type: 'dropdown', data: LEAGUES, onChange: handleLeague, defaultValue: leagueId },
-        { label: 'Week', type: 'dropdown', data: weekOptions, onChange: handleWeek, defaultValue: resolvedWeek },
-        { label: 'Day', type: 'dropdown', data: dayOptions, onChange: handleDay, defaultValue: resolvedDay },
+        { label: 'Week', type: 'dropdown', data: weekOptions, onChange: handleWeek, defaultValue: resolvedWeek ?? undefined },
+        { label: 'Day', type: 'dropdown', data: dayOptions, onChange: handleDay, defaultValue: resolvedDay ?? undefined },
     ];
 
     return (

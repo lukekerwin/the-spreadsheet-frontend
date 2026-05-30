@@ -17,6 +17,10 @@ export { fetchGoalieStatsNames, type FetchGoalieStatsNamesFilters } from './goal
 export { fetchTeamCards, type FetchTeamCardsFilters } from './teams';
 export { fetchTeamCardNames, type FetchTeamCardNamesFilters } from './teams';
 
+// Games API
+export { fetchGames, type FetchGamesFilters } from './games';
+export { fetchGameDetail } from './games';
+
 // Public API
 export { fetchPublicPlayerCards, fetchPublicGoalieCards, fetchPublicTeamCards } from './public';
 

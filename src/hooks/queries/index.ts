@@ -12,6 +12,8 @@ export { useGoalieStatsNames } from './getGoalieStatsNames';
 export { useTeamCards } from './getTeamCards';
 export { useTeamCardNames } from './getTeamCardNames';
 export { useTeamSOSFilters } from './getTeamSOSFilters';
+export { useGames } from './getGames';
+export { useGameDetail } from './getGameDetail';
 export { useTeamSOSData } from './getTeamSOSData';
 
 // Public endpoints (no auth required)

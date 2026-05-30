@@ -24,6 +24,7 @@ const NAV_LINKS = [
     { href: '/players', label: 'PLAYERS' },
     { href: '/goalies', label: 'GOALIES' },
     { href: '/teams', label: 'TEAMS' },
+    { href: '/games', label: 'GAMES' },
     { href: '/tools', label: 'TOOLS' },
 ] as const;
 

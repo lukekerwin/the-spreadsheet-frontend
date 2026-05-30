@@ -172,13 +172,14 @@ function GoalieTable({ goalies }: { goalies: GoalieLine[] }) {
                 <table className="sk-table">
                     <thead>
                         <tr>
-                            <th className="l">Goalie</th>
+                            <th>OVR</th><th className="l">Goalie</th>
                             <th>TOI</th><th>SA</th><th>SV</th><th>GA</th><th>SV%</th><th>SO</th><th>GSAx</th>
                         </tr>
                     </thead>
                     <tbody>
                         {goalies.map((g) => (
                             <tr key={g.playerId}>
+                                <td><Badge v={g.ovr} /></td>
                                 <td className="l"><span className="sk-name">{g.playerName}</span></td>
                                 <td className="dim">{toiFmt(g.toi)}</td>
                                 <td>{n(g.shotsAgainst)}</td>

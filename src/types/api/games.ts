@@ -84,6 +84,7 @@ export interface GoalieLine {
     shotsAgainst: number | null; saves: number | null; goalsAgainst: number | null;
     svPct: number | null; gaa: number | null; shutouts: number | null;
     gsax: number | null; gsaa: number | null;
+    ovr: number | null;
 }
 
 export interface GameDetailResponse {

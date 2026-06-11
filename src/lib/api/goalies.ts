@@ -28,6 +28,17 @@ export async function fetchGoalieCards(filters?: FetchGoalieCardsFilters) {
     return apiCall('/api/v1/goalies/cards', 'GET', undefined, apiFilters);
 }
 
+export interface FetchGoalieWeeklyCardsFilters {
+    seasonId: number;
+    leagueId: number;
+    gameTypeId: number;
+    playerId: number;
+}
+
+export async function fetchGoalieWeeklyCards(filters: FetchGoalieWeeklyCardsFilters) {
+    return apiCall('/api/v1/goalies/cards/weekly', 'GET', undefined, filters as unknown as Record<string, unknown>);
+}
+
 export interface FetchGoalieCardNamesFilters {
     seasonId?: number;
     leagueId?: number;

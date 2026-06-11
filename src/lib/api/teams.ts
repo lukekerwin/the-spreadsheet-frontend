@@ -18,6 +18,17 @@ export async function fetchTeamCards(filters?: FetchTeamCardsFilters) {
     return apiCall('/api/v1/teams/cards', 'GET', undefined, filters as Record<string, unknown> | undefined);
 }
 
+export interface FetchTeamWeeklyCardsFilters {
+    seasonId: number;
+    leagueId: number;
+    gameTypeId: number;
+    teamId: number;
+}
+
+export async function fetchTeamWeeklyCards(filters: FetchTeamWeeklyCardsFilters) {
+    return apiCall('/api/v1/teams/cards/weekly', 'GET', undefined, filters as unknown as Record<string, unknown>);
+}
+
 export interface FetchTeamCardNamesFilters {
     seasonId?: number;
     leagueId?: number;

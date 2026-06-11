@@ -22,6 +22,8 @@ import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
 import ErrorState from '@/components/shared/error-state/ErrorState';
 import StatsExplanationModal from '@/components/cards/StatsExplanationModal';
+import WeeklyCardsModal from '@/components/cards/WeeklyCardsModal';
+import type { CardProps } from '@/types/api/cards';
 import { SEASONS, LEAGUES, POSITIONS, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { usePlayerCards, usePlayerCardNames, usePublicPlayerCards } from '@/hooks/queries';
 
@@ -53,6 +55,7 @@ export default function PlayersPage() {
     const [selectedPlayers, setSelectedPlayers] = useState<MultiSelectAutocompleteOption[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null);
 
     // ============================================
     // DEBOUNCE FILTER CHANGES
@@ -183,6 +186,19 @@ export default function PlayersPage() {
         setCurrentPage(1);
     };
 
+    // ============================================
+    // CARD CLICK -> WEEKLY CARDS MODAL
+    // ============================================
+    const handleCardClick = (card: CardProps) => {
+        if (!isAuthenticated) {
+            openAuthModal(card.entityId ? () => setSelectedCard(card) : undefined);
+            return;
+        }
+        if (card.entityId) {
+            setSelectedCard(card);
+        }
+    };
+
     const handlePlayerChange = (options: MultiSelectAutocompleteOption[]) => {
         if (!isAuthenticated) {
             openAuthModal(() => {
@@ -298,6 +314,7 @@ export default function PlayersPage() {
                                         key={`player-${index}`}
                                         card={player}
                                         tierGradients={PLAYER_TIER_GRADIENTS}
+                                        onClick={() => handleCardClick(player)}
                                     />
                                 ))}
                             </div>
@@ -325,6 +342,19 @@ export default function PlayersPage() {
                     isOpen={isStatsModalOpen}
                     onClose={() => setIsStatsModalOpen(false)}
                     type="player"
+                />
+
+                {/* Weekly Cards Modal */}
+                <WeeklyCardsModal
+                    isOpen={selectedCard !== null}
+                    onClose={() => setSelectedCard(null)}
+                    card={selectedCard}
+                    type="player"
+                    seasonId={Number(debouncedSeason.value)}
+                    seasonLabel={debouncedSeason.label}
+                    leagueId={Number(debouncedLeague.value)}
+                    gameTypeId={Number(debouncedGameType.value)}
+                    posGroup={debouncedPosition?.value as string | undefined}
                 />
         </div>
     );

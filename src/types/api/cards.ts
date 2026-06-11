@@ -21,6 +21,8 @@ export interface CardProps {
     ratings: Array<CardItem>;
     stats: Array<CardItem>;
     teamColor: string;
+    weekId?: number;
+    entityId?: number;
 }
 
 /**

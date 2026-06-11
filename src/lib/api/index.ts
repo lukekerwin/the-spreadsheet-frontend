@@ -1,6 +1,7 @@
 
 // Players API
 export { fetchPlayerCards, type FetchPlayerCardsFilters } from './players';
+export { fetchPlayerWeeklyCards, type FetchPlayerWeeklyCardsFilters } from './players';
 export { fetchPlayerCardNames, type FetchPlayerCardNamesFilters } from './players';
 export { fetchPlayerStats, type FetchPlayerStatsFilters } from './players';
 export { fetchPlayerStatsTeams, type FetchPlayerStatsTeamsFilters } from './players';
@@ -8,6 +9,7 @@ export { fetchPlayerStatsNames, type FetchPlayerStatsNamesFilters } from './play
 
 // Goalies API
 export { fetchGoalieCards, type FetchGoalieCardsFilters } from './goalies';
+export { fetchGoalieWeeklyCards, type FetchGoalieWeeklyCardsFilters } from './goalies';
 export { fetchGoalieCardNames, type FetchGoalieCardNamesFilters } from './goalies';
 export { fetchGoalieStats, type FetchGoalieStatsFilters } from './goalies';
 export { fetchGoalieStatsTeams, type FetchGoalieStatsTeamsFilters } from './goalies';
@@ -15,6 +17,7 @@ export { fetchGoalieStatsNames, type FetchGoalieStatsNamesFilters } from './goal
 
 // Teams API
 export { fetchTeamCards, type FetchTeamCardsFilters } from './teams';
+export { fetchTeamWeeklyCards, type FetchTeamWeeklyCardsFilters } from './teams';
 export { fetchTeamCardNames, type FetchTeamCardNamesFilters } from './teams';
 
 // Games API

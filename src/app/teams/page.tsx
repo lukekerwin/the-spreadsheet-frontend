@@ -20,6 +20,8 @@ import Card, { TEAM_TIER_GRADIENTS } from '@/components/cards/Card';
 import CardSkeleton from '@/components/cards/CardSkeleton';
 import EmptyState from '@/components/shared/empty-state/EmptyState';
 import ErrorState from '@/components/shared/error-state/ErrorState';
+import WeeklyCardsModal from '@/components/cards/WeeklyCardsModal';
+import type { CardProps } from '@/types/api/cards';
 import { SEASONS, LEAGUES, GAME_TYPES, DEFAULT_SEASON_ID, DEFAULT_LEAGUE_ID, DEFAULT_GAME_TYPE_ID, DEFAULT_CARD_PAGE_SIZE } from '@/constants/filters';
 import { useTeamCards, useTeamCardNames, usePublicTeamCards } from '@/hooks/queries';
 
@@ -46,6 +48,7 @@ export default function TeamsPage() {
     });
     const [selectedTeam, setSelectedTeam] = useState<AutocompleteOption | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedCard, setSelectedCard] = useState<CardProps | null>(null);
 
     // ============================================
     // DEBOUNCE FILTER CHANGES
@@ -156,6 +159,19 @@ export default function TeamsPage() {
         setCurrentPage(1);
     };
 
+    // ============================================
+    // CARD CLICK -> WEEKLY CARDS MODAL
+    // ============================================
+    const handleCardClick = (card: CardProps) => {
+        if (!isAuthenticated) {
+            openAuthModal(card.entityId ? () => setSelectedCard(card) : undefined);
+            return;
+        }
+        if (card.entityId) {
+            setSelectedCard(card);
+        }
+    };
+
     const handleTeamChange = (option: AutocompleteOption | null) => {
         // Only require auth if value is actually changing (ignore initialization)
         if (option?.id === selectedTeam?.id) return;
@@ -250,6 +266,7 @@ export default function TeamsPage() {
                                         key={`team-${index}`}
                                         card={team}
                                         tierGradients={TEAM_TIER_GRADIENTS}
+                                        onClick={() => handleCardClick(team)}
                                     />
                                 ))}
                             </div>
@@ -271,6 +288,18 @@ export default function TeamsPage() {
                         />
                     )}
                 </div>
+
+                {/* Weekly Cards Modal */}
+                <WeeklyCardsModal
+                    isOpen={selectedCard !== null}
+                    onClose={() => setSelectedCard(null)}
+                    card={selectedCard}
+                    type="team"
+                    seasonId={Number(debouncedSeason.value)}
+                    seasonLabel={debouncedSeason.label}
+                    leagueId={Number(debouncedLeague.value)}
+                    gameTypeId={Number(debouncedGameType.value)}
+                />
         </div>
     );
 }

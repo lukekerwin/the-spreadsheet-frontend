@@ -29,6 +29,7 @@ const getRatingColor = (rating: number | string): string => {
 interface CardComponentProps {
     card: CardProps;
     tierGradients: TierConfig;
+    onClick?: () => void;
 }
 
 export interface TierConfig {
@@ -66,13 +67,28 @@ export const TEAM_TIER_GRADIENTS: TierConfig = {
 // COMPONENT
 // ============================================
 
-export default function Card({ card, tierGradients }: CardComponentProps) {
+export default function Card({ card, tierGradients, onClick }: CardComponentProps) {
     const getTierGradient = (tier: string, tierGradients: TierConfig): string => {
         return tierGradients[tier] || 'linear-gradient(to right, #6b7280, #64748b)';
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (!onClick) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick();
+        }
+    };
+
     return (
-        <div className={styles.card} style={{ backgroundColor: card.teamColor }}>
+        <div
+            className={onClick ? `${styles.card} ${styles.clickable}` : styles.card}
+            style={{ backgroundColor: card.teamColor }}
+            onClick={onClick}
+            onKeyDown={onClick ? handleKeyDown : undefined}
+            role={onClick ? 'button' : undefined}
+            tabIndex={onClick ? 0 : undefined}
+        >
 
             {/* Banner OVR Badge */}
             <div className={styles.banner}>

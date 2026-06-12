@@ -3,70 +3,21 @@
 /**
  * Manager Tools Hub
  * Subscription tier ($10/mo) with GM-focused tools: contract values,
- * trade analyzer, depth charts, and opponent scouting
+ * trade analyzer, depth charts, and opponent scouting.
+ * Subscribers are redirected to the first tool; tools are navigated
+ * via the ManagerSubNav tabs.
  */
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import PageHeader from '@/components/shared/header/PageHeader';
 import { useAuth } from '@/providers/AuthProvider';
 import { subscribeManagerTools } from '@/lib/api/subscription';
-import {
-    ClipboardList,
-    CheckCircle,
-    Crown,
-    DollarSign,
-    ArrowLeftRight,
-    Users,
-    Eye,
-} from 'lucide-react';
-
-// ============================================
-// TYPES
-// ============================================
-
-interface ManagerTool {
-    title: string;
-    description: string;
-    href: string;
-    icon: React.ReactNode;
-    comingSoon?: boolean;
-}
+import { ClipboardList, CheckCircle, Crown } from 'lucide-react';
 
 // ============================================
 // CONSTANTS
 // ============================================
-
-const MANAGER_TOOLS: ManagerTool[] = [
-    {
-        title: 'Contract Values',
-        description: 'See what every player is actually worth based on GAR production vs their contract. Find the over- and underpaid across the league.',
-        href: '/tools/manager/contract-values',
-        icon: <DollarSign size={24} />,
-    },
-    {
-        title: 'Trade Analyzer',
-        description: 'Compare both sides of a trade using GAR, contract value, and SOS-adjusted ratings before you pull the trigger.',
-        href: '/tools/manager/trade-analyzer',
-        icon: <ArrowLeftRight size={24} />,
-        comingSoon: true,
-    },
-    {
-        title: 'Depth Chart',
-        description: 'Your roster grouped by position with GAR percentiles. Spot the holes in your lineup before your opponents do.',
-        href: '/tools/manager/depth-chart',
-        icon: <Users size={24} />,
-        comingSoon: true,
-    },
-    {
-        title: 'Scouting Report',
-        description: 'Pre-game intel on upcoming opponents: roster GAR, goalie GSAx, and recent form at a glance.',
-        href: '/tools/manager/scouting',
-        icon: <Eye size={24} />,
-        comingSoon: true,
-    },
-] as const;
 
 const FEATURES = [
     'Contract value analysis: production vs salary for every player',
@@ -80,44 +31,6 @@ const FEATURES = [
 // ============================================
 // COMPONENTS
 // ============================================
-
-function ManagerToolCard({ title, description, href, icon, comingSoon = false }: ManagerTool) {
-    const cardContent = (
-        <>
-            {/* Coming Soon Badge */}
-            {comingSoon && (
-                <div className='absolute top-3 right-3 px-2 py-1 bg-gray-700/50 border border-gray-600/50 rounded-full'>
-                    <span className='text-xs font-semibold text-gray-400'>COMING SOON</span>
-                </div>
-            )}
-
-            <div className='flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-amber-400/10 to-yellow-400/10 text-amber-400'>
-                {icon}
-            </div>
-            <div className='flex flex-col gap-2'>
-                <h3 className='text-xl font-semibold text-gray-100 font-rajdhani'>{title}</h3>
-                <p className='text-sm text-gray-400 leading-relaxed'>{description}</p>
-            </div>
-        </>
-    );
-
-    if (comingSoon) {
-        return (
-            <div className='flex flex-col gap-4 p-6 bg-gray-800/30 border border-gray-700/30 rounded-xl relative opacity-60 cursor-default'>
-                {cardContent}
-            </div>
-        );
-    }
-
-    return (
-        <Link
-            href={href}
-            className='flex flex-col gap-4 p-6 bg-gray-800/50 border border-amber-500/30 rounded-xl transition-all duration-200 hover:bg-gray-800/80 hover:-translate-y-0.5 active:translate-y-0 focus:outline-none relative hover:border-amber-400 hover:shadow-[0_4px_12px_rgba(251,191,36,0.15),0_2px_6px_rgba(0,0,0,0.3)] focus:border-amber-400 focus:shadow-[0_0_0_3px_rgba(251,191,36,0.3),0_4px_12px_rgba(251,191,36,0.15)]'
-        >
-            {cardContent}
-        </Link>
-    );
-}
 
 function ManagerToolsContent() {
     const router = useRouter();
@@ -149,6 +62,13 @@ function ManagerToolsContent() {
             return () => clearTimeout(timer);
         }
     }, [subscribeMessage]);
+
+    // Subscribers land on the first tool; tools are tabs, not cards
+    useEffect(() => {
+        if (!isAuthLoading && hasManagerTools && !searchParams.get('subscribe')) {
+            router.replace('/tools/manager/contract-values');
+        }
+    }, [isAuthLoading, hasManagerTools, searchParams, router]);
 
     // ============================================
     // HANDLERS
@@ -257,23 +177,22 @@ function ManagerToolsContent() {
     }
 
     // ============================================
-    // RENDER - MANAGER HUB
+    // RENDER - SUBSCRIBER (redirecting to first tool)
     // ============================================
     return (
         <div className='page-container'>
             <PageHeader title="MANAGER TOOLS" />
             <div className='content-container'>
-                {/* Subscribe Message */}
+                {/* Subscribe Message (shown briefly after Stripe redirect) */}
                 {subscribeMessage && (
                     <div className={`max-w-2xl mx-auto mb-6 p-4 rounded-lg ${subscribeMessage.includes('successful') ? 'bg-green-500/20 text-green-300' : 'bg-gray-700/50 text-gray-300'}`}>
                         {subscribeMessage}
                     </div>
                 )}
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 mt-8'>
-                    {MANAGER_TOOLS.map((tool) => (
-                        <ManagerToolCard key={tool.href} {...tool} />
-                    ))}
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2'></div>
+                    <p className='text-gray-400'>Loading Manager Tools...</p>
                 </div>
             </div>
         </div>

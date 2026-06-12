@@ -13,18 +13,20 @@ import type { ContractValueData } from '@/types/api';
 import type { FiltersBarItem } from '@/components/shared/filters-bar/FiltersBar';
 import PageHeader from '@/components/shared/header/PageHeader';
 import FiltersBar from '@/components/shared/filters-bar/FiltersBar';
+import SubNav from '@/components/tools/ManagerSubNav';
 import Table from '@/components/shared/table/Table';
 import Pagination from '@/components/shared/pagination/Pagination';
 import ErrorState from '@/components/shared/error-state/ErrorState';
 import { useAuth } from '@/providers/AuthProvider';
 import { useContractValues } from '@/hooks/queries';
-import { ArrowLeft, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 // ============================================
 // CONSTANTS
 // ============================================
 
 const SEASON_OPTIONS = [
+    { label: 'S53', value: 53 },
     { label: 'S52', value: 52 },
     { label: 'S51', value: 51 },
     { label: 'S50', value: 50 },
@@ -113,7 +115,7 @@ export default function ContractValuesPage() {
     // ============================================
     // FILTER STATE
     // ============================================
-    const [seasonId, setSeasonId] = useState<number>(52);
+    const [seasonId, setSeasonId] = useState<number>(53);
     const [leagueId, setLeagueId] = useState<number>(37);
     const [posGroup, setPosGroup] = useState<string | undefined>(undefined);
     const [rosteredOnly, setRosteredOnly] = useState<boolean>(true);
@@ -401,20 +403,14 @@ export default function ContractValuesPage() {
     // ============================================
     return (
         <div className='page-container'>
+            {/* Manager Tools Sub Navigation */}
+            <SubNav />
+
             <PageHeader
                 title="CONTRACT VALUES"
                 subtitle={`Last Updated: ${response?.lastUpdated ? `${response.lastUpdated} EST` : ""}`}
             />
             <div className='content-container'>
-                {/* Back to Manager Tools */}
-                <button
-                    onClick={() => router.push('/tools/manager')}
-                    className='flex items-center gap-2 text-gray-400 hover:text-gray-200 transition-colors mb-4'
-                >
-                    <ArrowLeft size={16} />
-                    <span>Manager Tools</span>
-                </button>
-
                 {/* Filters Bar */}
                 <FiltersBar items={FILTERS_BAR_ITEMS} />
 

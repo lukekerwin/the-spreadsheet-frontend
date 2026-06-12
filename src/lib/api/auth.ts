@@ -27,6 +27,8 @@ export interface User {
     has_premium_access: boolean;
     // One-time purchase access
     has_bidding_package: boolean;
+    // Manager tools subscription access (optional until backend exposes it)
+    has_manager_tools?: boolean;
 }
 
 export interface LoginRequest {

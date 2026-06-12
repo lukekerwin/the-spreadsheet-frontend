@@ -2,7 +2,7 @@
 
 import PageHeader from '@/components/shared/header/PageHeader';
 import ToolCard from '@/components/tools/ToolCard';
-import { TrendingUp, Gavel } from 'lucide-react';
+import { TrendingUp, Gavel, ClipboardList } from 'lucide-react';
 
 // ============================================
 // TYPES
@@ -14,6 +14,7 @@ interface Tool {
     href: string;
     icon: React.ReactNode;
     isPremium?: boolean;
+    badgeLabel?: string;
 }
 
 // ============================================
@@ -33,6 +34,14 @@ const TOOLS: Tool[] = [
         href: '/tools/bidding-package',
         icon: <Gavel size={24} />,
         isPremium: false,
+    },
+    {
+        title: 'Manager Tools',
+        description: 'The GM toolkit: contract values, trade analyzer, depth charts, and opponent scouting.',
+        href: '/tools/manager',
+        icon: <ClipboardList size={24} />,
+        isPremium: true,
+        badgeLabel: 'MANAGER',
     },
 ] as const;
 
@@ -59,6 +68,7 @@ export default function ToolsPage() {
                             href={tool.href}
                             icon={tool.icon}
                             isPremium={tool.isPremium}
+                            badgeLabel={tool.badgeLabel}
                         />
                     ))}
                 </div>

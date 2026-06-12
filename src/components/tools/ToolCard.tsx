@@ -14,13 +14,14 @@ interface ToolCardProps {
     href: string;
     icon?: ReactNode;
     isPremium?: boolean;
+    badgeLabel?: string;
 }
 
 // ============================================
 // COMPONENT
 // ============================================
 
-export default function ToolCard({ title, description, href, icon, isPremium = false }: ToolCardProps) {
+export default function ToolCard({ title, description, href, icon, isPremium = false, badgeLabel = 'SUBSCRIBER' }: ToolCardProps) {
     return (
         <Link
             href={href}
@@ -34,7 +35,7 @@ export default function ToolCard({ title, description, href, icon, isPremium = f
             {isPremium && (
                 <div className='absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 rounded-full'>
                     <Crown size={12} className='text-amber-400' />
-                    <span className='text-xs font-semibold text-amber-400'>SUBSCRIBER</span>
+                    <span className='text-xs font-semibold text-amber-400'>{badgeLabel}</span>
                 </div>
             )}
 

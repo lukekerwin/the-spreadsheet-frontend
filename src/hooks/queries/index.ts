@@ -27,3 +27,6 @@ export { usePublicTeamCards } from './getPublicTeamCards';
 // Premium endpoints
 export { useBiddingPackage } from './useBiddingPackage';
 export { useBiddingPackagePlayer } from './useBiddingPackagePlayer';
+
+// Manager Tools endpoints
+export { useContractValues } from './useContractValues';

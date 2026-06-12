@@ -44,7 +44,6 @@ const MANAGER_TOOLS: ManagerTool[] = [
         description: 'See what every player is actually worth based on GAR production vs their contract. Find the over- and underpaid across the league.',
         href: '/tools/manager/contract-values',
         icon: <DollarSign size={24} />,
-        comingSoon: true,
     },
     {
         title: 'Trade Analyzer',

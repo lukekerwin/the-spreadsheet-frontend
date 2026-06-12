@@ -30,5 +30,8 @@ export { fetchPublicPlayerCards, fetchPublicGoalieCards, fetchPublicTeamCards } 
 // Bidding Package API (Premium)
 export { fetchBiddingPackageData, fetchBiddingPackagePlayer } from './biddingPackage';
 
+// Manager Tools API (Subscription)
+export { fetchContractValues } from './manager';
+
 // HTTP client (rarely used directly)
 export { apiCall } from './client';
